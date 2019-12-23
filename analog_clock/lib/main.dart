@@ -30,5 +30,5 @@ void main() {
   //
   // Your job is to edit [AnalogClock], or replace it with your own clock
   // widget. (Look in analog_clock.dart for more details!)
-  runApp(ClockCustomizer((ClockModel model) => AnalogClock(model)));
+  runApp(ClockCustomizer((ClockModel model) => MultiClocks(model)));
 }
