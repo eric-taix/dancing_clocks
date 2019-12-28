@@ -24,7 +24,6 @@ class Theming {
 
   Color get handColor => _colors[_Element.handColor];
   Color get backgroundColor => _colors[_Element.backgroundColor];
-  double get handThickness => 9.0;
 
   Theming(this._colors);
 

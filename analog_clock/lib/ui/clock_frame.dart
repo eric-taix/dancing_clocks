@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'theming.dart';
+import '../theming.dart';
 
 class ClockFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var theming = Theming.of(context);
-    return Container(
-      width: 50,
-      decoration: new BoxDecoration(
-        color: Color(0xFFF5F5F5),
-        shape: BoxShape.circle,
-        boxShadow: [
-          new CustomBoxShadow(
-            color: Colors.black,
-            blurRadius: 40.0,
-            offset: new Offset(2.0, 3.0),
-            blurStyle: BlurStyle.inner,
-          ),
-        ],
+    return Center(
+      child: Container(
+        width: 50,
+        decoration: new BoxDecoration(
+          color: Color(0xFFF5F5F5),
+          shape: BoxShape.circle,
+          boxShadow: [
+            new CustomBoxShadow(
+              color: Colors.black,
+              blurRadius: 40.0,
+              offset: new Offset(2.0, 3.0),
+              blurStyle: BlurStyle.inner,
+            ),
+          ],
+        ),
       ),
     );
   }

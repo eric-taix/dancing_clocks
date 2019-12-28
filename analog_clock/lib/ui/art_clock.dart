@@ -1,38 +1,25 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 import 'dart:async';
 
-import 'package:analog_clock/hand.dart';
-import 'package:analog_clock/hand_animation_controller.dart';
+import 'package:analog_clock/animation/hand_animation_controller.dart';
 import 'package:analog_clock/landscape.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:intl/intl.dart';
-import 'package:vector_math/vector_math_64.dart' show radians;
 
 import 'clock.dart';
 
-/// Total distance traveled by a second or a minute hand, each second or minute,
-/// respectively.
-final radiansPerTick = radians(360 / 60);
-
-/// Total distance traveled by an hour hand, each hour, in radians.
-final radiansPerHour = radians(360 / 12);
-
-class MultiClocks extends StatefulWidget {
-  const MultiClocks(this.model);
+class ArtClock extends StatefulWidget {
 
   final ClockModel model;
 
+  const ArtClock(this.model);
+
   @override
-  _MultiClocksState createState() => _MultiClocksState();
+  _ArtClockState createState() => _ArtClockState();
 }
 
-class _MultiClocksState extends State<MultiClocks> with SingleTickerProviderStateMixin, LandscapeStatefulMixin {
+class _ArtClockState extends State<ArtClock> with SingleTickerProviderStateMixin, LandscapeStatefulMixin {
   var _now = DateTime.now();
   Timer _timer;
   HandAnimationController animationController;
@@ -42,11 +29,11 @@ class _MultiClocksState extends State<MultiClocks> with SingleTickerProviderStat
     super.initState();
     animationController = new HandAnimationController(
       vsync: this,
-      duration: new Duration(seconds: 5),
+      duration: new Duration(seconds: 15),
     )
     ..addStatusListener((state) {
       if (state == AnimationStatus.completed) {
-        animationController.notifyInnerStatusListeners(state);
+        animationController.notifyHandStatusListeners(state);
         animationController.reset();
         animationController.forward();
       }

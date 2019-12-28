@@ -1,19 +1,17 @@
 import 'dart:math' as math;
 
-import 'package:analog_clock/hand_animation_controller.dart';
-import 'package:analog_clock/tweens/hand_tween.dart';
+import 'package:analog_clock/animation/hand_animation_controller.dart';
 import 'package:analog_clock/theming.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'drawn_hand.dart';
 
 class AnimatedHand extends StatefulWidget {
-  final HandAnimationController _animationController;
-  final double _startRadian;
-  final double _size;
-  final double _speed;
+  final HandAnimationController animationController;
+  final double startAngle;
+  final double size;
 
-  AnimatedHand(Key key, this._animationController, this._startRadian, this._size, this._speed) : super(key: key);
+  AnimatedHand({Key key, @required this.animationController, this.startAngle = 0, this.size = 1}) : super(key: key);
 
   @override
   _AnimatedHandState createState()  => _AnimatedHandState();
@@ -24,22 +22,22 @@ class _AnimatedHandState extends State<AnimatedHand> {
 
   @override
   void initState() {
-    buildTween(widget._startRadian);
-    widget._animationController.addInnerStatusListener(statusChanged);
+    _buildTween(widget.startAngle);
+    widget.animationController.addHandStatusListener(statusChanged);
   }
 
   @override
   void dispose() {
-    widget._animationController.removeStatusListener(statusChanged);
+    widget.animationController.removeHandStatusListener(statusChanged);
   }
 
   void statusChanged(AnimationStatus status) {
     if (status == AnimationStatus.completed) {
-      buildTween(angle.value);
+      _buildTween(angle.value);
     }
   }
 
-  void buildTween(double initialRadian) {
+  void _buildTween(double initialRadian) {
     while (initialRadian > 2 * math.pi) {
      initialRadian = initialRadian - 2 * math.pi;
     }
@@ -52,7 +50,7 @@ class _AnimatedHandState extends State<AnimatedHand> {
     angle =
         Tween(begin: initialRadian, end: end)
             .animate(CurvedAnimation(
-                parent: widget._animationController,
+                parent: widget.animationController,
                 curve: Interval(
                   0,
                   1,
@@ -64,9 +62,9 @@ class _AnimatedHandState extends State<AnimatedHand> {
   Widget build(BuildContext context) {
     var theming = Theming.of(context);
     return AnimatedBuilder(
-      animation: widget._animationController,
+      animation: widget.animationController,
       builder: (BuildContext context, Widget _widget) {
-        return DrawnHand(color: theming.handColor, thickness: theming.handThickness, size: widget._size, angleRadians: angle.value);
+        return DrawnHand(color: theming.handColor, thickness: 9.0, size: widget.size, angleRadians: angle.value);
       },
     );
   }
