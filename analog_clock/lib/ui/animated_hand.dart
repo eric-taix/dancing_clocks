@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:analog_clock/animation/hand_animation_controller.dart';
 import 'package:analog_clock/theming.dart';
+import 'package:analog_clock/tweens/character_code.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'drawn_hand.dart';
@@ -46,7 +47,6 @@ class _AnimatedHandState extends State<AnimatedHand> {
     }
     var direction = math.Random().nextBool() ? 1 : -1;
     var end = initialRadian + (math.Random().nextDouble() * (4 * math.pi)) * direction;
-
     angle =
         Tween(begin: initialRadian, end: end)
             .animate(CurvedAnimation(

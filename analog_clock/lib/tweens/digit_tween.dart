@@ -1,4 +1,4 @@
-import 'package:analog_clock/tweens/digits.dart';
+import 'package:analog_clock/tweens/character_code.dart';
 import 'package:flutter/widgets.dart';
 
 class DigitTween extends Tween {
