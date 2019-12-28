@@ -41,7 +41,8 @@ class DrawnHand extends Hand {
       child: SizedBox.expand(
         child: CustomPaint(
           painter: _HandPainter(
-            handSize: size,
+            // Remove some margin to draw the shadow
+            handSize: size-0.25,
             lineWidth: thickness,
             angleRadians: angleRadians,
             color: color,
@@ -73,16 +74,26 @@ class _HandPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final center = (Offset.zero & size).center;
-    // We want to start at the top, not at the x-axis, so add pi/2.
-    final angle = angleRadians - math.pi / 2.0;
-    final length = size.shortestSide * 0.5 * handSize;
-    final position = center + Offset(math.cos(angle), math.sin(angle)) * length;
     final linePaint = Paint()
       ..color = color
       ..strokeWidth = lineWidth
-      ..strokeCap = StrokeCap.square;
+      ..strokeCap = StrokeCap.round;
 
+    final center = (Offset(0.0, -0.2) & size).center;
+    final angle = angleRadians - math.pi / 2.0;
+    final length = size.shortestSide * 0.5 * handSize;
+    final dest = Offset(math.cos(angle), math.sin(angle)) * length;
+    final position = center + dest;
+
+    final centerShadow = center + Offset(0.0, 0.0);
+    final positionShadow = centerShadow + dest;
+    var path = Path()
+      ..moveTo(centerShadow.dx, centerShadow.dy)
+      ..lineTo(positionShadow.dx, positionShadow.dy)
+      ..lineTo(positionShadow.dx, positionShadow.dy+lineWidth)
+      ..lineTo(centerShadow.dx, centerShadow.dy+lineWidth)
+      ..close();
+    canvas.drawShadow(path, color, 5.0, true);
     canvas.drawLine(center, position, linePaint);
   }
 
