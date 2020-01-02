@@ -9,6 +9,7 @@ import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'tweens/drawing.dart';
 import 'ui/art_clock.dart';
 
 void main() {
@@ -30,5 +31,6 @@ void main() {
   //
   // Your job is to edit [AnalogClock], or replace it with your own clock
   // widget. (Look in analog_clock.dart for more details!)
+  registerDrawings();
   runApp(ClockCustomizer((ClockModel model) => ArtClock(model)));
 }

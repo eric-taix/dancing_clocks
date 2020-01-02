@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:analog_clock/animation/hand_animation_controller.dart';
 import 'package:analog_clock/landscape.dart';
+import 'package:analog_clock/tweens/tween_provider.dart';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
@@ -20,6 +21,11 @@ class ArtClock extends StatefulWidget {
 }
 
 class _ArtClockState extends State<ArtClock> with SingleTickerProviderStateMixin, LandscapeStatefulMixin {
+  static const columns = 14;
+  static const rows = columns * 3 ~/ 5;
+
+  TweenProvider _tweenProvider = RandomTweenProvider(columns, rows);
+
   var _now = DateTime.now();
   Timer _timer;
   HandAnimationController animationController;
@@ -29,10 +35,13 @@ class _ArtClockState extends State<ArtClock> with SingleTickerProviderStateMixin
     super.initState();
     animationController = new HandAnimationController(
       vsync: this,
-      duration: new Duration(seconds: 15),
+      duration: new Duration(seconds: 5),
     )
     ..addStatusListener((state) {
       if (state == AnimationStatus.completed) {
+        setState(() {
+          _tweenProvider.next();
+        });
         animationController.notifyHandStatusListeners(state);
         animationController.reset();
         animationController.forward();
@@ -65,23 +74,23 @@ class _ArtClockState extends State<ArtClock> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    print("Build analog_clock");
+    print("Build art clock");
 
     final time = DateFormat.Hms().format(DateTime.now());
 
     return Semantics.fromProperties(
       properties: SemanticsProperties(
-        label: 'Analog clock with time $time',
+        label: 'Art clock with time $time',
         value: time,
       ),
       child: Center(
         child: GridView.count(
-            crossAxisCount: 15,
+            crossAxisCount: columns,
             childAspectRatio: 1,
             shrinkWrap: true,
-            children: List.generate(15*8, (index) {
+            children: List.generate(columns * rows, (index) {
               return Center(
-                child: Clock(key: ValueKey("$index"), dateTime: _now, animationController: animationController)
+                child: Clock(pixelX: index % columns, pixelY: index ~/ columns, tweenProvider: _tweenProvider, dateTime: _now, animationController: animationController)
               );
             }
           )
