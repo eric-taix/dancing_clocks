@@ -1,4 +1,6 @@
-import 'package:analog_clock/tweens/tween_provider.dart';
+import 'dart:math';
+
+import 'package:analog_clock/tweens/clock_animation_provider.dart';
 import 'package:analog_clock/ui/animated_hand.dart';
 import 'package:analog_clock/ui/clock_axis.dart';
 import 'package:analog_clock/ui/clock_frame.dart';
@@ -7,17 +9,19 @@ import 'package:vector_math/vector_math_64.dart' show radians;
 
 import '../theming.dart';
 
-final _radiansPerTick = radians(360 / 60);
+final _radiansPerMinute = radians(360 / 60);
 final _radiansPerHour = radians(360 / 12);
 
-class Clock extends StatelessWidget {
-  final DateTime dateTime;
-  final AnimationController animationController;
-  final int pixelX;
-  final int pixelY;
-  final TweenProvider tweenProvider;
+// Start at 10:10 (i.e. '\/') which is, for watchmakers, the best time
+// because it's like smiling to your customers
+final _startHours = 10;
+final _startMinutes = 10;
 
-  Clock({Key key, @required this.pixelX, @required this.pixelY, @required this.tweenProvider, this.dateTime, @required this.animationController}) : super(key: key);
+class Clock extends StatelessWidget {
+  final Point point;
+  final ClockAnimationProvider clockAnimationProvider;
+
+  Clock({@required this.point, @required this.clockAnimationProvider});
 
   @override
   Widget build(BuildContext context) {
@@ -28,17 +32,15 @@ class Clock extends StatelessWidget {
         children: [
           ClockFrame(),
           AnimatedHand(
-            id: Coordinates(pixelX, pixelY, CoordType.hours),
-            animationController: animationController,
-            tweenProvider: tweenProvider,
-            startAngle: dateTime.hour * _radiansPerHour + (dateTime.minute / 60),
+            coordinate: Coordinates.forHours(point),
+            clockAnimationProvider: clockAnimationProvider,
+            startAngle: _startHours * _radiansPerHour + (_startMinutes / 60),
             size: 1.0,
           ),
           AnimatedHand(
-            id: Coordinates(pixelX, pixelY, CoordType.minutes),
-            animationController: animationController,
-            tweenProvider: tweenProvider,
-            startAngle: dateTime.minute * _radiansPerTick,
+            coordinate: Coordinates.forMinutes(point),
+            clockAnimationProvider: clockAnimationProvider,
+            startAngle: _startMinutes * _radiansPerMinute,
             size: 0.9,
           ),
           ClockAxis(),

@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'package:intl/intl.dart';
 
 const double pi = 3.1415926535897932;
 
@@ -151,6 +152,18 @@ void registerDrawings() {
         _space_, 875.250, 750.250, 750.250, 750.250, 750.250, 750.125, _space_, _space_, _space_, _space_, _space_,
       ]));
   Drawing.registerDrawing(
+      "rain",
+      Drawing(12, [
+        _space_, _space_, _space_, _space_, 625.250, 750.250, 750.250, 750.375, _space_, _space_, _space_, _space_,
+        _space_, _space_, _space_, 125.500, _space_, _space_, _space_, _space_, 875.500, 625.250, 750.375, _space_,
+        _space_, 625.250, 750.250, 750.375, _space_, _space_, _space_, _space_, 000.625, _space_, _space_, 875.500,
+        125.500, _space_, _space_, _space_, 865.500, _space_, _space_, 125.125, _space_, _space_, _space_, 625.000,
+        000.375, _space_, _space_, _space_, _space_, _space_, _space_, 625.000, 750.250, 750.250, 750.125, _space_,
+        _space_, 875.250, 750.250, 750.250, 750.250, 750.250, 750.125, _space_, _space_, _space_, _space_, _space_,
+        _space_, _space_, _space_, _space_, _space_, _space_, _space_, _space_, _space_, _space_, _space_, _space_,
+        _space_, _space_, _space_, _space_, _space_, _space_, _space_, _space_, _space_, _space_, _space_, _space_,
+      ]));
+  Drawing.registerDrawing(
       "sun",
       Drawing(6, [
         875.375, _space_, 500.435, 565.500, _space_, 625.125,
@@ -179,6 +192,15 @@ class Drawing {
   static void registerDrawing(String name, Drawing code) => _drawings[name] = code;
 
   static Drawing fromName(String name) => _drawings[name];
+
+  static List<Drawing> fromCurrentTime() {
+    var time = DateTime.now();
+    String date = DateFormat('kk:mm').format(time);
+    //date = "67:09";
+    return date.codeUnits
+        .map((codeUnit) => String.fromCharCode(codeUnit))
+        .map((char) => Drawing.fromName(char)).toList();
+  }
 }
 
 class Pixel {
