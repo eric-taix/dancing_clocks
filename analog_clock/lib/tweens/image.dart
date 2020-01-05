@@ -1,15 +1,16 @@
 
 import 'dart:math' as math;
 
+import 'package:analog_clock/tweens/coordinates.dart';
 import 'package:analog_clock/tweens/drawing.dart';
-import 'package:analog_clock/ui/animated_hand.dart';
 
-class Screen {
+class ClockImage {
   final int width;
   final int height;
+  final Duration duration;
   List<List<Pixel>> _pixels;
 
-  Screen(this.width, this.height, List<Drawing> drawings, {math.Point<int> position}) {
+  ClockImage(this.width, this.height, this.duration, List<Drawing> drawings, {math.Point<int> position}) {
     _clear();
     if (position == null) {
       position = _center(drawings);
@@ -34,7 +35,7 @@ class Screen {
     _pixels = new List.generate(height, (_) =>
         List.generate(width, (_) =>
         Drawing
-            .fromName(" ")
+            .fromKey(" ")
             .pixels[0]));
   }
 

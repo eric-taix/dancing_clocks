@@ -1,11 +1,9 @@
 import 'dart:math' as math;
-import 'dart:math';
 
-import 'package:analog_clock/animation/hand_animation_controller.dart';
 import 'package:analog_clock/theming.dart';
-import 'package:analog_clock/tweens/drawing.dart';
-import 'package:analog_clock/tweens/clock_animation_provider.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:analog_clock/animation/clock_animation_provider.dart';
+import 'package:analog_clock/tweens/coordinates.dart';
+import 'package:flutter/widgets.dart';
 
 import 'drawn_hand.dart';
 
@@ -51,7 +49,7 @@ class _AnimatedHandState extends State<AnimatedHand> {
       currentRadian = currentRadian + 2 * math.pi;
     }
     
-    angle = widget.clockAnimationProvider.getHandAnimation(widget.coordinate, currentRadian);
+   angle = widget.clockAnimationProvider.getHandAnimation(widget.coordinate, currentRadian);
   }
 
   @override
@@ -66,19 +64,3 @@ class _AnimatedHandState extends State<AnimatedHand> {
   }
 }
 
-enum CoordType {
-  hours,
-  minutes
-}
-
-class Coordinates {
-  final Point point;
-  final CoordType coordType;
-  Coordinates(this.point, this.coordType);
-  factory Coordinates.forHours(Point point) => Coordinates(point, CoordType.hours);
-  factory Coordinates.forMinutes(Point point) => Coordinates(point, CoordType.minutes);
-  
-  @override
-  String toString() => "Coord $point for $coordType";
-
-}

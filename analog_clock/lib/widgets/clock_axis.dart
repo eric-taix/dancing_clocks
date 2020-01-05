@@ -1,7 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 
-import '../theming.dart';
+import 'package:analog_clock/theming.dart';
 
 class ClockAxis extends StatelessWidget {
   @override

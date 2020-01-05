@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import '../theming.dart';
 
 class ClockFrame extends StatelessWidget {
   @override

@@ -1,13 +1,14 @@
 import 'dart:math';
 
-import 'package:analog_clock/tweens/clock_animation_provider.dart';
-import 'package:analog_clock/ui/animated_hand.dart';
-import 'package:analog_clock/ui/clock_axis.dart';
-import 'package:analog_clock/ui/clock_frame.dart';
+import 'package:analog_clock/animation/clock_animation_provider.dart';
+import 'package:analog_clock/tweens/coordinates.dart';
+import 'package:analog_clock/widgets//animated_hand.dart';
+import 'package:analog_clock/widgets/clock_axis.dart';
+import 'package:analog_clock/widgets/clock_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' show radians;
 
-import '../theming.dart';
+import 'package:analog_clock/theming.dart';
 
 final _radiansPerMinute = radians(360 / 60);
 final _radiansPerHour = radians(360 / 12);
