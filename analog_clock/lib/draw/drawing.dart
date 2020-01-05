@@ -191,7 +191,7 @@ void registerDrawings() {
 
 class Drawing {
   final int width;
-  final List<Pixel> pixels;
+  final List<Angle> pixels;
 
   int get height => pixels.length ~/ width;
 
@@ -201,17 +201,15 @@ class Drawing {
       : pixels = definition.map((value) {
     var i = value.floor();
     var d = (value - i) * 1000;
-    return Pixel((i * 2 * math.pi / 1000), (d * 2 * math.pi / 1000));
+    return Angle((i * 2 * math.pi / 1000), (d * 2 * math.pi / 1000));
   }).toList();
 
   static void registerDrawing(String key, Drawing code) => _drawings[key] = code;
 
   static Drawing fromKey(String key) => _drawings[key];
 
-  static List<Drawing> fromCurrentTime(String timeFormatSeparator) {
-    var time = DateTime.now();
+  static List<Drawing> fromTime(DateTime time, String timeFormatSeparator) {
     String date = DateFormat('kk:mm').format(time);
-    //date = "67:09";
     var hm = date.split(":");
     return fromCharacters("${hm[0]}${timeFormatSeparator}${hm[1]}");
   }
@@ -223,9 +221,9 @@ class Drawing {
   }
 }
 
-class Pixel {
+class Angle {
   final double hoursAngle;
   final double minutesAngle;
 
-  Pixel(this.hoursAngle, this.minutesAngle);
+  Angle(this.hoursAngle, this.minutesAngle);
 }

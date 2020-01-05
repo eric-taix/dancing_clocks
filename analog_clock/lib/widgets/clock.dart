@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:analog_clock/animation/clock_animation_provider.dart';
-import 'package:analog_clock/tweens/coordinates.dart';
+import 'package:analog_clock/draw/coordinates.dart';
 import 'package:analog_clock/widgets//animated_hand.dart';
 import 'package:analog_clock/widgets/clock_axis.dart';
 import 'package:analog_clock/widgets/clock_frame.dart';

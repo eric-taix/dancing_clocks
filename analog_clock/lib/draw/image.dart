@@ -1,16 +1,19 @@
-
 import 'dart:math' as math;
 
-import 'package:analog_clock/tweens/coordinates.dart';
-import 'package:analog_clock/tweens/drawing.dart';
+import 'package:analog_clock/animation/clockwise_direction_tween.dart';
+import 'package:analog_clock/draw/coordinates.dart';
+import 'package:analog_clock/draw/drawing.dart';
 
 class ClockImage {
   final int width;
   final int height;
   final Duration duration;
-  List<List<Pixel>> _pixels;
+  final ClockWiseDirection direction;
+  final Duration pause;
+  List<List<Angle>> _pixels;
 
-  ClockImage(this.width, this.height, this.duration, List<Drawing> drawings, {math.Point<int> position}) {
+  ClockImage(this.width, this.height, this.duration, this.direction, List<Drawing> drawings,
+      {this.pause, math.Point<int> position, }) {
     _clear();
     if (position == null) {
       position = _center(drawings);
@@ -47,5 +50,5 @@ class ClockImage {
     return math.Point(paddingX, paddingY);
   }
 
-  Pixel getPixelsAt(Coordinates coord) => _pixels[coord.point.y][coord.point.x];
+  Angle getPixelsAt(Coordinates coord) => _pixels[coord.point.y][coord.point.x];
 }

@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:analog_clock/theming.dart';
 import 'package:analog_clock/animation/clock_animation_provider.dart';
-import 'package:analog_clock/tweens/coordinates.dart';
+import 'package:analog_clock/draw/coordinates.dart';
 import 'package:flutter/widgets.dart';
 
 import 'drawn_hand.dart';
