@@ -12,7 +12,7 @@ class ClockTweenBuilder {
 
   final List<TweenSequenceItem<double>> _items = List();
 
-  void addTween(double end, Duration duration, {ClockWiseDirection direction = ClockWiseDirection.Random, Curve curve = Curves.easeInOut, Duration pause}) {
+  void addTween(double end, Duration duration, {ClockWiseDirection direction = ClockWiseDirection.Shortest, Curve curve = Curves.easeInOut, Duration pause}) {
     _cumulatedDuration += duration;
     _items.add(TweenSequenceItem(
         tween: ClockwiseDirectionTween.from(

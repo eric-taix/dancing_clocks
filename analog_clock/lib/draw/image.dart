@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:analog_clock/animation/clockwise_direction_tween.dart';
 import 'package:analog_clock/draw/coordinates.dart';
 import 'package:analog_clock/draw/drawing.dart';
+import 'package:flutter/animation.dart';
 
 class ClockImage {
   final int width;
@@ -10,10 +11,11 @@ class ClockImage {
   final Duration duration;
   final ClockWiseDirection direction;
   final Duration pause;
+  final Curve curve;
   List<List<Angle>> _pixels;
 
   ClockImage(this.width, this.height, this.duration, this.direction, List<Drawing> drawings,
-      {this.pause, math.Point<int> position, }) {
+      {this.pause, math.Point<int> position, this.curve = Curves.easeInOut}) {
     _clear();
     if (position == null) {
       position = _center(drawings);

@@ -1,54 +1,129 @@
 import 'dart:math';
 
-import 'package:analog_clock/draw/generator/angle_generator.dart';
-
 final Random _random = Random(42);
 
 class AngleDistributor {
+  _Distributor _distributor;
 
-  final int _width;
-  final int _height;
-
-  List<_Distributor> _distributors;
-
-  AngleDistributor(this._width, this._height) {
-    _distributors = [
-    //  _MirrorDistributor(_width, _height, 0, (point, width, height) => false),
-      _MirrorDistributor(_width, _height, 500, (point, width, height) => point.y + 1 > height / 2),
-    //  _MirrorDistributor(_width, _height, 1000, (point, width, height) => point.x + 1 > width / 2),
-    ];
+  AngleDistributor(int width, int height) {
+    var increment = (_random.nextInt(40) + 10) * (_random.nextBool() ? 1 : -1);
+    var r = _random.nextInt(4);
+    r = 3;
+    switch (r) {
+      case 0:
+        // No mirror
+        _distributor = _MirrorDistributor(width, height, (value) => value, [(point, width, height) => -3], increment);
+        break;
+      case 1:
+        // Vertical mirror
+        _distributor = _MirrorDistributor(width, height, (value) => 500 - value, [
+          (point, width, height) => (((height + 1) / 2) - point.y - 1),
+          (point, width, height) => point.y + 1 > ((height + 1) / 2) ? (height - point.y).toDouble() : -(point.y + 1).toDouble(),
+        ], increment);
+        break;
+      case 2:
+        // Horizontal mirror
+        _distributor = _MirrorDistributor(width, height, (value) => 1000 - value, [
+          (point, width, height) => (((width + 1) / 2) - point.x - 1),
+          (point, width, height) => point.x + 1 > ((width + 1) / 2) ? (width - point.x).toDouble() : -(point.x + 1).toDouble(),
+        ], increment);
+        break;
+      default:
+        // Quarter mirror
+        _distributor = _CompositeMirrorDistributor(width, height, [
+          _MirrorDistributor(width, height, (value) => value, [
+            (point, width, height) => (((height + 1) / 2) - point.y - 1),
+          ], increment),
+          _MirrorDistributor(width, height, (value) => 500 - value, [
+            (point, width, height) => (((height + 1) / 2) - point.y - 1),
+          ], increment),
+          _MirrorDistributor(width, height, (value) => 1000 - value, [
+            (point, width, height) => (((width + 1) / 2) - point.x - 1),
+          ], increment),
+          _MirrorDistributor(width, height, (value) => 500 + value, [
+            (point, width, height) => 0, //(((width + 1) / 2) - point.x - 1),
+            (point, width, height) => 0
+          ], increment),
+        ], (point, width, height) {
+          if (point.x + 1 <= width / 2) {
+            return point.y + 1 <= height / 2 ? 0 : 1;
+          } else {
+            return point.y + 1 <= height / 2 ? 2 : 3;
+          }
+        });
+        break;
+    }
   }
 
-  double generate(Point point) => _distributors[_random.nextInt(_distributors.length)].get(point);
+  double generateFromAngle(Point point, double originalAngle) => _distributor.fromAngle(point, originalAngle);
+
+  double generateFromPreviousAngle(Point point, double originalAngle) => _distributor.fromPreviousAngle(point, originalAngle);
 }
 
 abstract class _Distributor {
-  double get(Point point);
+  double fromAngle(Point point, double angle);
+
+  double fromPreviousAngle(Point point, double angle);
 }
 
-typedef bool IsMirrored(Point point, int width, int height);
+typedef int Calc(int value);
+typedef double DistanceFromMirrorPoint(Point point, int width, int height);
 
-class _MirrorDistributor extends _Distributor {
-
+class _MirrorDistributor implements _Distributor {
   final int _width;
   final int _height;
-  final int _mirror;
-  final IsMirrored _isMirrored;
+  final Calc _calc;
+  final List<DistanceFromMirrorPoint> _distancesFromMirror;
+  DistanceFromMirrorPoint _distanceFromMirror;
 
-  final double _angle = AngleGenerator().generate();
+  final int _increment;
 
-  _MirrorDistributor(this._width, this._height, this._mirror, this._isMirrored);
+  _MirrorDistributor(this._width, this._height, this._calc, this._distancesFromMirror, this._increment) {
+    _distanceFromMirror = _distancesFromMirror[_random.nextInt(_distancesFromMirror.length)];
+  }
 
   @override
-  double get(Point point) {
-    if (_isMirrored(point, _width, _height)) {
-      int integer = _angle.floor();
-      int decimal = ((_angle - integer) * 1000).floor();
-      integer = integer <= _mirror ? _mirror - integer : 1000 + (_mirror - integer);
-      decimal = decimal <= _mirror ? _mirror - decimal : 1000 + (_mirror - decimal);
+  double fromAngle(Point point, double angle) {
+    if (_distanceFromMirror(point, _width, _height) < 0) {
+      int integer = angle.floor();
+      int decimal = ((angle - integer) * 1000).floor();
+      integer = _calc(integer);
+      decimal = _calc(decimal);
       return integer + (decimal / 1000);
     } else {
-      return _angle;
+      return angle;
     }
+  }
+
+  @override
+  double fromPreviousAngle(Point point, double previousAngle) {
+    var angle = fromAngle(point, previousAngle);
+    var distance = _distanceFromMirror(point, _width, _height);
+    int integer = angle.floor();
+    int decimal = ((angle - integer) * 1000).floor();
+    return (integer + _increment * distance) + ((decimal - _increment * distance) / 1000);
+  }
+}
+
+typedef int ChooseMirror(Point point, int width, int height);
+
+class _CompositeMirrorDistributor implements _Distributor {
+  final int _width;
+  final int _height;
+  final List<_MirrorDistributor> _mirrors;
+  final ChooseMirror _chooseMirror;
+
+  _CompositeMirrorDistributor(this._width, this._height, this._mirrors, this._chooseMirror);
+
+  @override
+  double fromAngle(Point<num> point, double angle) {
+    int index = _chooseMirror(point, _width, _height);
+    return _mirrors[index].fromAngle(point, angle);
+  }
+
+  @override
+  double fromPreviousAngle(Point point, double angle) {
+    int index = _chooseMirror(point, _width, _height);
+    return _mirrors[index].fromPreviousAngle(point, angle);
   }
 }

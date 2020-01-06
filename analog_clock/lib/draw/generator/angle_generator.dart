@@ -31,7 +31,7 @@ class _CornerAngleGenerator implements _Generator {
 
   @override
   double get() {
-    var startAngle = _predefinedAngles[_random.nextInt(_predefinedAngles.length)];
+    var startAngle = _random.nextInt(1000) + (_random.nextInt(1000) / 1000);
     return startAngle + ((startAngle + 250) / 1000);
   }
 }
