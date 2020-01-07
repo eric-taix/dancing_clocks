@@ -1,7 +1,3 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 import 'dart:io';
 
 import 'package:flutter_clock_helper/customizer.dart';
@@ -9,7 +5,8 @@ import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'ui/art_clock.dart';
+import 'draw/drawing.dart';
+import 'dancing_clock.dart';
 
 void main() {
   // A temporary measure until Platform supports web and TargetPlatform supports
@@ -30,5 +27,6 @@ void main() {
   //
   // Your job is to edit [AnalogClock], or replace it with your own clock
   // widget. (Look in analog_clock.dart for more details!)
-  runApp(ClockCustomizer((ClockModel model) => ArtClock(model)));
+  registerDrawings();
+  runApp(ClockCustomizer((ClockModel model) => DancingClock(model)));
 }

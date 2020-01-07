@@ -5,11 +5,11 @@ import 'package:flutter/widgets.dart';
 /// A specific AnimationController with hand listeners to be able
 /// to update the status in AnimatedHand before the controller's value
 /// has been updated with stop, reset, forward, ...
-class HandAnimationController extends AnimationController {
+class ClockAnimationController extends AnimationController {
 
   final _handStatusListeners = _InnerStatusListener();
 
-  HandAnimationController({@required TickerProvider vsync, Duration duration}): super(vsync: vsync, duration: duration);
+  ClockAnimationController({@required TickerProvider vsync, Duration duration}): super(vsync: vsync, duration: duration);
 
   void addHandStatusListener(AnimationStatusListener listener) {
     _handStatusListeners.addStatusListener(listener);
