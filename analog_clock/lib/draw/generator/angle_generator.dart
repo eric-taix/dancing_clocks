@@ -27,8 +27,6 @@ class _RandomAngleGenerator implements _Generator {
 
 class _CornerAngleGenerator implements _Generator {
 
-  final List<int> _predefinedAngles = [0, 250, 500, 750];
-
   @override
   double get() {
     var startAngle = _random.nextInt(1000) + (_random.nextInt(1000) / 1000);

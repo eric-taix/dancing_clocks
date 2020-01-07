@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:analog_clock/animation/clock_animation_controller.dart';
 import 'package:analog_clock/animation/clock_tween_builder.dart';
 import 'package:analog_clock/animation/clockwise_direction_tween.dart';
@@ -16,13 +15,12 @@ class ClockAnimationProvider {
   final ClockModel model;
   final ClockAnimationController animationController;
 
-  final math.Random _random = math.Random();
   List<ClockImage> _images;
 
   ClockAnimationProvider(this.model, this.width, this.height, SingleTickerProviderStateMixin ticker)
       : animationController = new ClockAnimationController(
           vsync: ticker,
-          duration: new Duration(seconds: 4),
+          duration: new Duration(seconds: 30),
         ) {
     _images = List();
     animationController
@@ -38,33 +36,31 @@ class ClockAnimationProvider {
     animationController.forward();
   }
 
-  @override
   void prepareNextCycle() {
     _images.clear();
-    /*   _images.addAll(_buildTimeAnimation(
-      initialDuration: Duration(seconds: 6),
-      blinkDuration: Duration(seconds: 10),
-    ));*/
+       _images.addAll(_buildTimeAnimation(
+      initialDuration: Duration(seconds: 4),
+      blinkDuration: Duration(seconds: 6),
+    ));
     // 12 seconds
-    _images.addAll(_buildDancingAnimation(Duration(seconds: 3)));
+    _images.addAll(_buildDancingAnimation(Duration(seconds: 2)));
+    _images.addAll(_buildDancingAnimation(Duration(seconds: 2)));
    /* _images.addAll(_buildDancingAnimation(Duration(seconds: 3)));
     _images.addAll(_buildDancingAnimation(Duration(seconds: 3)));
     _images.addAll(_buildDancingAnimation(Duration(seconds: 3))); */
-/*    _images.add(
+    _images.add(
       ClockImage(
         width,
         height,
-        Duration(seconds: 5),
+        Duration(seconds: 4),
         ClockWiseDirection.Shortest,
         [Drawing.fromKey(model.weatherString)],
         pause: Duration(seconds: 2),
       ),
     );
     // 12 seconds
-    _images.addAll(_buildDancingAnimation(Duration(seconds: 3)));
-    _images.addAll(_buildDancingAnimation(Duration(seconds: 3)));
-    _images.addAll(_buildDancingAnimation(Duration(seconds: 3)));
-    _images.addAll(_buildDancingAnimation(Duration(seconds: 3))); */
+    _images.addAll(_buildDancingAnimation(Duration(seconds: 2)));
+    _images.addAll(_buildDancingAnimation(Duration(seconds: 2)));
   }
 
   Animation<double> getHandAnimation(Coordinates coord, double fromRadian) {
@@ -102,7 +98,7 @@ class ClockAnimationProvider {
     var drawingGenerator = DrawingGenerator(width, height);
     return [
       ClockImage(width, height, duration, ClockWiseDirection.Shortest, [drawingGenerator.generate()], curve: Curves.easeInOut),
-      ClockImage(width, height, duration, ClockWiseDirection.Shortest, [drawingGenerator.generateFromPrevious()], curve: Curves.easeInOut),
+      ClockImage(width, height, duration, ClockWiseDirection.Shortest, [drawingGenerator.generateDivergedFromPrevious()], curve: Curves.easeInOut),
     ];
   }
 }

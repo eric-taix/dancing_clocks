@@ -18,15 +18,15 @@ class DrawingGenerator {
     return Drawing(
         _width,
         List.generate(_width * _height, (index) {
-          return _distributor.generateFromAngle(Point(index % _width, index ~/ _width), _angle);
+          return _distributor.getMirroredFromAngle(Point(index % _width, index ~/ _width), _angle);
         }));
   }
 
-  Drawing generateFromPrevious() {
+  Drawing generateDivergedFromPrevious() {
     return Drawing(
         _width,
         List.generate(_width * _height, (index) {
-          return _distributor.generateFromPreviousAngle(Point(index % _width, index ~/ _width), _angle);
+          return _distributor.getDivergedFromAngle(Point(index % _width, index ~/ _width), _angle);
         }));
   }
 }

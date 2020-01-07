@@ -6,124 +6,139 @@ class AngleDistributor {
   _Distributor _distributor;
 
   AngleDistributor(int width, int height) {
-    var increment = (_random.nextInt(40) + 10) * (_random.nextBool() ? 1 : -1);
-    var r = _random.nextInt(4);
-    r = 3;
-    switch (r) {
-      case 0:
-        // No mirror
-        _distributor = _MirrorDistributor(width, height, (value) => value, [(point, width, height) => -3], increment);
-        break;
+    var _center = Point((width + 1) / 2, (height + 1) / 2);
+    var divergenceFactor = (_random.nextInt(40) + 10) * (_random.nextBool() ? 1 : -1);
+    var distributorIndex = _random.nextInt(8);
+    switch (distributorIndex) {
       case 1:
-        // Vertical mirror
-        _distributor = _MirrorDistributor(width, height, (value) => 500 - value, [
-          (point, width, height) => (((height + 1) / 2) - point.y - 1),
-          (point, width, height) => point.y + 1 > ((height + 1) / 2) ? (height - point.y).toDouble() : -(point.y + 1).toDouble(),
-        ], increment);
+        _distributor = _MirrorDistributor(
+          angleFromHorizontalAxis(_center.y),
+          horizontalAxisDivergenceEvaluator(_center.y),
+          divergenceFactor,
+        );
         break;
       case 2:
-        // Horizontal mirror
-        _distributor = _MirrorDistributor(width, height, (value) => 1000 - value, [
-          (point, width, height) => (((width + 1) / 2) - point.x - 1),
-          (point, width, height) => point.x + 1 > ((width + 1) / 2) ? (width - point.x).toDouble() : -(point.x + 1).toDouble(),
-        ], increment);
+        _distributor = _MirrorDistributor(
+          angleFromVerticalAxis(_center.x),
+          verticalAxisDivergenceEvaluator(_center.x),
+          divergenceFactor,
+        );
+        break;
+      case 3:
+        _distributor = _MirrorDistributor(
+          angleFromHorizontalAndVerticalAxis(_center),
+          centerDivergenceEvaluator(_center),
+          divergenceFactor,
+        );
+        break;
+      case 4:
+        _distributor = _MirrorDistributor(
+          angleFromHorizontalAndVerticalAxis(Point(_center.x, height-1.toDouble())),
+          centerDivergenceEvaluator(Point(_center.x, height-1.toDouble())),
+          divergenceFactor,
+        );
+        break;
+      case 5:
+        _distributor = _MirrorDistributor(
+          angleFromHorizontalAndVerticalAxis(Point(_center.x, 0.toDouble())),
+          centerDivergenceEvaluator(Point(_center.x, 0.toDouble())),
+          divergenceFactor,
+        );
+        break;
+      case 6:
+        _distributor = _MirrorDistributor(
+          angleFromHorizontalAndVerticalAxis(Point(0.toDouble(), _center.y)),
+          centerDivergenceEvaluator(Point(0.toDouble(), _center.y)),
+          divergenceFactor,
+        );
+        break;
+      case 7:
+        _distributor = _MirrorDistributor(
+          angleFromHorizontalAndVerticalAxis(Point(width-1.toDouble(), _center.y)),
+          centerDivergenceEvaluator(Point(width-1.toDouble(), _center.y)),
+          divergenceFactor,
+        );
         break;
       default:
-        // Quarter mirror
-        _distributor = _CompositeMirrorDistributor(width, height, [
-          _MirrorDistributor(width, height, (value) => value, [
-            (point, width, height) => (((height + 1) / 2) - point.y - 1),
-          ], increment),
-          _MirrorDistributor(width, height, (value) => 500 - value, [
-            (point, width, height) => (((height + 1) / 2) - point.y - 1),
-          ], increment),
-          _MirrorDistributor(width, height, (value) => 1000 - value, [
-            (point, width, height) => (((width + 1) / 2) - point.x - 1),
-          ], increment),
-          _MirrorDistributor(width, height, (value) => 500 + value, [
-            (point, width, height) => 0, //(((width + 1) / 2) - point.x - 1),
-            (point, width, height) => 0
-          ], increment),
-        ], (point, width, height) {
-          if (point.x + 1 <= width / 2) {
-            return point.y + 1 <= height / 2 ? 0 : 1;
-          } else {
-            return point.y + 1 <= height / 2 ? 2 : 3;
-          }
-        });
-        break;
+        _distributor = _MirrorDistributor(sameAngle(), fixedDivergenceEvaluator(3), divergenceFactor);
     }
   }
 
-  double generateFromAngle(Point point, double originalAngle) => _distributor.fromAngle(point, originalAngle);
+  double getMirroredFromAngle(Point point, double originalAngle) => _distributor.getMirroredFromAngle(point, originalAngle);
 
-  double generateFromPreviousAngle(Point point, double originalAngle) => _distributor.fromPreviousAngle(point, originalAngle);
+  double getDivergedFromAngle(Point point, double originalAngle) => _distributor.getDivergedFromAngle(point, originalAngle);
 }
 
+/// Utilities functions to compute mirroring
+typedef int Mirror(int value);
+
+Mirror noMirror = (value) => value;
+Mirror verticalMirror = (value) => 500 - value;
+Mirror horizontalMirror = (value) => 1000 - value;
+Mirror horizontalAndVerticalMirror = (value) => horizontalMirror(verticalMirror(value));
+
+/// Utilities functions to evaluate a distance
+typedef double DivergenceEvaluator(Point point);
+
+DivergenceEvaluator fixedDivergenceEvaluator(double divergence) => (Point point) => divergence;
+
+DivergenceEvaluator horizontalAxisDivergenceEvaluator(double axisY) => (Point point) => axisY - (point.y + 1);
+
+DivergenceEvaluator verticalAxisDivergenceEvaluator(double axisX) => (Point point) => axisX - (point.x + 1);
+
+DivergenceEvaluator centerDivergenceEvaluator(Point center) => (Point point) {
+      var r = sqrt(pow(point.x - (center.x), 2) + pow(point.y - (center.y), 2));
+      return r;
+    };
+
+/// Utilities functions to compute a mirror angle regardless its position
+typedef int ComputeAngleFromMirror(Point point, int value);
+
+ComputeAngleFromMirror sameAngle() => (Point point, int value) => noMirror(value);
+
+ComputeAngleFromMirror angleFromHorizontalAxis(double axisY) =>
+    (Point point, int value) => horizontalAxisDivergenceEvaluator(axisY)(point) < 0 ? verticalMirror(value) : value;
+
+ComputeAngleFromMirror angleFromVerticalAxis(double axisX) =>
+    (Point point, int value) => verticalAxisDivergenceEvaluator(axisX)(point) < 0 ? horizontalMirror(value) : value;
+
+ComputeAngleFromMirror angleFromHorizontalAndVerticalAxis(Point axes) =>
+    (Point point, int value) => angleFromVerticalAxis(axes.x)(point, angleFromHorizontalAxis(axes.y)(point, value));
+
+/// C
 abstract class _Distributor {
-  double fromAngle(Point point, double angle);
+  double getMirroredFromAngle(Point point, double angle);
 
-  double fromPreviousAngle(Point point, double angle);
+  double getDivergedFromAngle(Point point, double angle);
 }
-
-typedef int Calc(int value);
-typedef double DistanceFromMirrorPoint(Point point, int width, int height);
 
 class _MirrorDistributor implements _Distributor {
-  final int _width;
-  final int _height;
-  final Calc _calc;
-  final List<DistanceFromMirrorPoint> _distancesFromMirror;
-  DistanceFromMirrorPoint _distanceFromMirror;
+  final ComputeAngleFromMirror _computeAngleFromMirror;
+  final DivergenceEvaluator _divergenceEvaluator;
+  final int _divergenceFactor;
 
-  final int _increment;
-
-  _MirrorDistributor(this._width, this._height, this._calc, this._distancesFromMirror, this._increment) {
-    _distanceFromMirror = _distancesFromMirror[_random.nextInt(_distancesFromMirror.length)];
-  }
+  _MirrorDistributor(this._computeAngleFromMirror, this._divergenceEvaluator, this._divergenceFactor);
 
   @override
-  double fromAngle(Point point, double angle) {
-    if (_distanceFromMirror(point, _width, _height) < 0) {
-      int integer = angle.floor();
-      int decimal = ((angle - integer) * 1000).floor();
-      integer = _calc(integer);
-      decimal = _calc(decimal);
-      return integer + (decimal / 1000);
-    } else {
-      return angle;
-    }
-  }
-
-  @override
-  double fromPreviousAngle(Point point, double previousAngle) {
-    var angle = fromAngle(point, previousAngle);
-    var distance = _distanceFromMirror(point, _width, _height);
+  double getMirroredFromAngle(Point point, double angle) {
     int integer = angle.floor();
     int decimal = ((angle - integer) * 1000).floor();
-    return (integer + _increment * distance) + ((decimal - _increment * distance) / 1000);
-  }
-}
-
-typedef int ChooseMirror(Point point, int width, int height);
-
-class _CompositeMirrorDistributor implements _Distributor {
-  final int _width;
-  final int _height;
-  final List<_MirrorDistributor> _mirrors;
-  final ChooseMirror _chooseMirror;
-
-  _CompositeMirrorDistributor(this._width, this._height, this._mirrors, this._chooseMirror);
-
-  @override
-  double fromAngle(Point<num> point, double angle) {
-    int index = _chooseMirror(point, _width, _height);
-    return _mirrors[index].fromAngle(point, angle);
+    integer = _computeAngleFromMirror(point, integer);
+    decimal = _computeAngleFromMirror(point, decimal);
+    return integer + (decimal / 1000);
   }
 
   @override
-  double fromPreviousAngle(Point point, double angle) {
-    int index = _chooseMirror(point, _width, _height);
-    return _mirrors[index].fromPreviousAngle(point, angle);
+  double getDivergedFromAngle(Point point, double angle) {
+    int integer = angle.floor();
+    int decimal = ((angle - integer) * 1000).floor();
+
+    var divergence = _divergenceEvaluator(point);
+    integer = (integer + divergence * _divergenceFactor).floor();
+    decimal = (decimal + divergence * _divergenceFactor).floor();
+
+    integer = _computeAngleFromMirror(point, integer);
+    decimal = _computeAngleFromMirror(point, decimal);
+    return integer + (decimal / 1000);
   }
 }

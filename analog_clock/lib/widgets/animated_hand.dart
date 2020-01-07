@@ -24,6 +24,7 @@ class _AnimatedHandState extends State<AnimatedHand> {
 
   @override
   void initState() {
+    super.initState();
     _buildTween(widget.startAngle);
     widget.clockAnimationProvider.animationController.addHandStatusListener(statusChanged);
   }
@@ -31,6 +32,7 @@ class _AnimatedHandState extends State<AnimatedHand> {
   @override
   void dispose() {
     widget.clockAnimationProvider.animationController.removeHandStatusListener(statusChanged);
+    super.dispose();
   }
 
   void statusChanged(AnimationStatus status) {
