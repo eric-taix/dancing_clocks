@@ -1,46 +1,43 @@
 import 'dart:math';
 
+import 'package:analog_clock/draw/drawing.dart';
+
 final Random _random = Random(42);
 
 class AngleDistributor {
-  _Distributor _distributor;
+  Distributor _distributor;
 
   AngleDistributor({int width, int height}) {
     var divergenceFactor = (_random.nextInt(40) + 10) * (_random.nextBool() ? 1 : -1);
     var divergencePoint = Point(_random.nextDouble() * (width + 1), _random.nextDouble() * (height + 1));
-    var distributorIndex = _random.nextInt(6);
+    var distributorIndex = _random.nextInt(5);
     switch (distributorIndex) {
       case 0:
-        _distributor = _MirrorDistributor(
+        _distributor = MirrorDistributor(
           angleFromHorizontalAxis(divergencePoint),
           horizontalAxisDivergenceEvaluator(divergencePoint),
           divergenceFactor,
         );
-        print("Case 1");
         break;
       case 1:
-        _distributor = _MirrorDistributor(
+        _distributor = MirrorDistributor(
           angleFromVerticalAxis(divergencePoint),
           verticalAxisDivergenceEvaluator(divergencePoint),
           divergenceFactor,
         );
-        print("Case 2");
         break;
       case 2:
         _distributor = MagneticDistributor(width, height, Magnet(width, height, _random.nextDouble()*2-1), dontChange());
-        print("Case 3");
         break;
       case 3:
         _distributor = MagneticDistributor(width, height, Magnet(width, height, _random.nextDouble()*2-1), fixAngle(0));
-        print("Case 4");
         break;
       default:
-        _distributor = _MirrorDistributor(
+        _distributor = MirrorDistributor(
           angleFromHorizontalAndVerticalAxis(divergencePoint),
           centerDivergenceEvaluator(divergencePoint),
           divergenceFactor,
         );
-        print("Case default");
         break;
     }
   }
@@ -69,10 +66,7 @@ DivergenceEvaluator horizontalAxisDivergenceEvaluator(Point center) => (Point po
 
 DivergenceEvaluator verticalAxisDivergenceEvaluator(Point center) => (Point point) => center.x - (point.x + 1);
 
-DivergenceEvaluator centerDivergenceEvaluator(Point center) => (Point point) {
-      var r = sqrt(pow(point.x - (center.x), 2) + pow(point.y - (center.y), 2));
-      return r;
-    };
+DivergenceEvaluator centerDivergenceEvaluator(Point center) => (Point point) => sqrt(pow(point.x - (center.x), 2) + pow(point.y - (center.y), 2));
 
 /// Utilities functions to compute a mirror angle regardless its position
 typedef int ComputeAngleFromMirror(Point point, int value);
@@ -89,29 +83,29 @@ ComputeAngleFromMirror angleFromHorizontalAndVerticalAxis(Point center) =>
     (Point point, int value) => angleFromVerticalAxis(center)(point, angleFromHorizontalAxis(center)(point, value));
 
 /// Compute angles
-abstract class _Distributor {
+abstract class Distributor {
   double getAngle(Point point, double angle);
 }
 
 /// Compute angles with mirror
-class _MirrorDistributor implements _Distributor {
-  final ComputeAngleFromMirror _computeAngleFromMirror;
-  final DivergenceEvaluator _divergenceEvaluator;
-  final int _divergenceFactor;
+class MirrorDistributor implements Distributor {
+  final ComputeAngleFromMirror computeAngleFromMirror;
+  final DivergenceEvaluator divergenceEvaluator;
+  final int divergenceFactor;
 
-  _MirrorDistributor(this._computeAngleFromMirror, this._divergenceEvaluator, this._divergenceFactor);
+  MirrorDistributor(this.computeAngleFromMirror, this.divergenceEvaluator, this.divergenceFactor);
 
   @override
   double getAngle(Point point, double angle) {
     int integer = angle.floor();
     int decimal = ((angle - integer) * 1000).floor();
 
-    var divergence = _divergenceEvaluator(point);
-    integer = (integer + divergence * _divergenceFactor).floor();
-    decimal = (decimal + divergence * _divergenceFactor).floor();
+    var divergence = divergenceEvaluator(point);
+    integer = (integer + divergence * divergenceFactor).floor();
+    decimal = (decimal + divergence * divergenceFactor).floor();
 
-    integer = _computeAngleFromMirror(point, integer);
-    decimal = _computeAngleFromMirror(point, decimal);
+    integer = computeAngleFromMirror(point, integer);
+    decimal = computeAngleFromMirror(point, decimal);
     return integer + (decimal / 1000);
   }
 }
@@ -120,13 +114,11 @@ class _MirrorDistributor implements _Distributor {
 /// A magnet which attracts hands
 class Magnet {
   Point _center;
-  final double _strength;
+  final double strength;
   Point get center => _center;
-  double get strength => _strength;
 
-  Magnet(int width, int height, this._strength) {
+  Magnet(int width, int height, this.strength) {
     _center = _randomPoint(width, height);
-    print("ste:$_strength");
   }
 }
 
@@ -136,7 +128,7 @@ CalcDelta dontChange() => (delta) => delta;
 CalcDelta minAngle(double angle) => (delta) => (delta < angle) ? delta = angle : delta;
 CalcDelta fixAngle(double angle) => (delta) => angle;
 
-class MagneticDistributor implements _Distributor {
+class MagneticDistributor implements Distributor {
   double _diagonal;
   final Magnet _magnet;
   final CalcDelta _calcDelta;
@@ -158,16 +150,15 @@ class MagneticDistributor implements _Distributor {
     double dy = (point.y + 1) - _magnet.center.y;
     double radius = sqrt(pow(dx, 2) + pow(dy, 2));
     double x = dx / radius;
-    double y = dy / radius;
     double angle = asin(x);
     if (dy > 0) {
       angle = 2 * pi - angle + pi;
     }
-    double strength = 0.4;
     double delta = pi + (_magnet.strength+1) * (pi/2) - ((pi / 2) * radius / _diagonal);
     delta = _calcDelta(delta);
     angle += (minutes ? -delta : delta);
 
     return (angle * 1000 / (2 * pi)).round();
   }
+
 }

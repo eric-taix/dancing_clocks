@@ -10,7 +10,7 @@ class DrawingGenerator {
   AngleDistributor _distributor;
 
   DrawingGenerator(this._width, this._height) {
-    _angle = AngleGenerator().generate();
+    _angle = AngleGenerator.generate();
     _distributor = AngleDistributor(width: _width, height: _height);
   }
 

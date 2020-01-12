@@ -32,6 +32,7 @@ class ClockTweenBuilder {
   }
 
   Animation<double> build(ClockAnimationController controller) {
+    print("Animation duration: ${_animationDuration.inMilliseconds} / Cumulative duration: ${_cumulatedDuration.inMilliseconds}");
     if (_cumulatedDuration < _animationDuration) {
       _items.add(TweenSequenceItem(
         tween: ClockwiseDirectionTween.from(_start, _start, direction: ClockWiseDirection.DontChange),
@@ -41,5 +42,5 @@ class ClockTweenBuilder {
     return TweenSequence(_items).animate(controller);
   }
 
-  double _duration2Weight(Duration duration) => (duration.inSeconds * 1000) / _animationDuration.inSeconds;
+  double _duration2Weight(Duration duration) => (duration.inMilliseconds * 1000) / _animationDuration.inMilliseconds;
 }

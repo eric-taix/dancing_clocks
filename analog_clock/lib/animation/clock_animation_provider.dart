@@ -3,7 +3,6 @@ import 'package:analog_clock/animation/clock_tween_builder.dart';
 import 'package:analog_clock/animation/clockwise_direction_tween.dart';
 import 'package:analog_clock/draw/coordinates.dart';
 import 'package:analog_clock/draw/generator/drawing_generator.dart';
-import 'package:analog_clock/draw/image.dart';
 import 'package:analog_clock/draw/drawing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -40,24 +39,27 @@ class ClockAnimationProvider {
   }
 
   Duration _prepareNextCycle() {
-    var dancingDuration = Duration(milliseconds: 3000);
-
+    var dancingDuration = Duration(milliseconds: 2000);
+    var dancingPause = Duration(milliseconds: 1000);
+    var dancingCount = 3;
     animationList = AnimationList(width, height);
- /*    _buildTimeAnimation(
-      duration: Duration(seconds: 2),
-      animationCount: 4,
-    );*/
-    _buildDancingAnimation(
-      duration: dancingDuration,
-      dancingCount: 8,
-    );
-   /* _buildTemperatureAnimation(
+     _buildTimeAnimation(
       duration: Duration(seconds: 2),
       animationCount: 4,
     );
     _buildDancingAnimation(
       duration: dancingDuration,
-      dancingCount: 8,
+      dancingCount: dancingCount,
+      pause: dancingPause,
+    );
+    _buildTemperatureAnimation(
+      duration: Duration(seconds: 2),
+      animationCount: 4,
+    );
+    _buildDancingAnimation(
+      duration: dancingDuration,
+      dancingCount: dancingCount,
+      pause: dancingPause,
     );
     _buildWeatherAnimation(
       weatherName: model.weatherString,
@@ -66,8 +68,9 @@ class ClockAnimationProvider {
     );
     _buildDancingAnimation(
       duration: dancingDuration,
-      dancingCount: 8,
-    );*/
+      dancingCount: dancingCount,
+      pause: dancingPause,
+    );
     return animationList.totalDuration;
   }
 
@@ -88,6 +91,12 @@ class ClockAnimationProvider {
         (index) => index % 2 == 0
             ? animationList.addImage(Drawing.fromTime(time, colon), index == 0 ? duration : Duration(seconds: 1))
             : animationList.addImage(Drawing.fromTime(time, colonBlink), Duration(seconds: 1)));
+    time = time.add(Duration(minutes: 1));
+    List.generate(
+        animationCount + 1,
+            (index) => index % 2 == 0
+            ? animationList.addImage(Drawing.fromTime(time, colon), index == 0 ? duration : Duration(seconds: 1))
+            : animationList.addImage(Drawing.fromTime(time, colonBlink), Duration(seconds: 1)));
   }
 
   void _buildWeatherAnimation({String weatherName, Duration duration, int animationCount}) {
@@ -97,14 +106,14 @@ class ClockAnimationProvider {
     }
   }
 
-  void _buildDancingAnimation({Duration duration, int dancingCount}) {
+  void _buildDancingAnimation({Duration duration, int dancingCount, Duration pause}) {
     for (int index = 0; index < dancingCount; index++) {
       animationList.addImage(
         [DrawingGenerator(width, height).generate()],
         duration,
         curve: Curves.easeInOut,
         direction: ClockWiseDirection.Shortest,
-        pause: Duration(seconds: 1),
+        pause: pause,
       );
     }
   }
