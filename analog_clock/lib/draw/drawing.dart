@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'package:flutter_clock_helper/model.dart';
 import 'package:intl/intl.dart';
 
 const double pi = 3.1415926535897932;
@@ -33,7 +34,9 @@ const _space_ = 625.625;
 ///
 
 const String colon = ":";
-const String colonBlink = "¨";
+const String colonBlink = ":-blink";
+const String degree = "°";
+const String degreeBlink = "°-blink";
 
 void registerDrawings() {
   Drawing.registerDrawing(" ", Drawing(1, [625.625]));
@@ -54,6 +57,42 @@ void registerDrawings() {
         435.315, 685.565,
         65.185, 815.935,
         _space_, _space_,
+      ]));
+  Drawing.registerDrawing(degree,
+      Drawing(2, [
+        _space_, _space_, // Avoid formatting to preserve expressivity
+        500.250, 750.500,
+        000.250, 750.000,
+        _space_, _space_,
+        _space_, _space_,
+        _space_, _space_,
+      ]));
+  Drawing.registerDrawing(degreeBlink,
+      Drawing(2, [
+        _space_, _space_, // Avoid formatting to preserve expressivity
+        560.190, 810.460,
+        940.310, 690.060,
+        _space_, _space_,
+        _space_, _space_,
+        _space_, _space_,
+      ]));
+  Drawing.registerDrawing("c",
+      Drawing(3, [
+        _space_, _space_, _space_, // Avoid formatting to preserve expressivity
+        250.500, 750.250, 750.500,
+        000.500, 500.250, 750.000,
+        000.500, 000.500, _space_,
+        000.500, 000.250, 750.500,
+        000.250, 750.250, 000.750
+      ]));
+  Drawing.registerDrawing("f",
+      Drawing(3, [
+        _space_, _space_, _space_, // Avoid formatting to preserve expressivity
+        500.250, 750.250, 750.500,
+        000.500, 250.500, 750.000,
+        000.500, 000.250, 750.500,
+        000.500, 500.250, 750.000,
+        000.250, 750.000, _space_
       ]));
   Drawing.registerDrawing(
       "0",
@@ -78,7 +117,7 @@ void registerDrawings() {
   Drawing.registerDrawing(
       "2",
       Drawing(3, [
-        500.250, 750.250, 750.500,// Avoid formatting to preserve expressivity
+        500.250, 750.250, 750.500, // Avoid formatting to preserve expressivity
         0.250, 750.500, 0.500,
         500.250, 0.750, 0.500,
         0.500, 500.250, 0.750,
@@ -99,11 +138,11 @@ void registerDrawings() {
       "4",
       Drawing(3, [
         500.250, 750.500, _space_, // Avoid formatting to preserve expressivity
-        500.0, 0.500,  _space_,
-        0.500, 0.250,  750.500,
+        500.0, 0.500, _space_,
+        0.500, 0.250, 750.500,
         0.250, 750.500, 0.500,
-        _space_,0.500, 0.500,
-        _space_,0.250, 750.0,
+        _space_, 0.500, 0.500,
+        _space_, 0.250, 750.0,
       ]));
   Drawing.registerDrawing(
       "5",
@@ -166,6 +205,16 @@ void registerDrawings() {
         _space_, 875.250, 750.250, 750.250, 750.250, 750.250, 750.125, _space_, _space_, _space_, _space_, _space_,
       ]));
   Drawing.registerDrawing(
+      "cloudy-blink",
+      Drawing(12, [
+        _space_, _space_, _space_, _space_, 625.250, 750.250, 750.250, 750.375, _space_, _space_, _space_, _space_,
+        _space_, _space_, _space_, 125.500, _space_, _space_, _space_, _space_, 875.500, 625.250, 750.375, _space_,
+        _space_, 625.250, 750.250, 750.375, _space_, _space_, _space_, _space_, 000.625, _space_, _space_, 875.500,
+        125.500, _space_, _space_, _space_, 865.500, _space_, _space_, 125.125, _space_, _space_, _space_, 625.000,
+        000.375, _space_, _space_, _space_, _space_, _space_, _space_, 625.000, 750.250, 750.250, 750.125, _space_,
+        _space_, 875.250, 750.250, 750.250, 750.250, 750.250, 750.125, _space_, _space_, _space_, _space_, _space_,
+      ]));
+  Drawing.registerDrawing(
       "rainy",
       Drawing(12, [
         _space_, _space_, _space_, _space_, 625.250, 750.250, 750.250, 750.375, _space_, _space_, _space_, _space_,
@@ -178,7 +227,29 @@ void registerDrawings() {
         _space_, 125.625, _space_, 125.625, _space_, 125.625, _space_, _space_, _space_, _space_, _space_, _space_,
       ]));
   Drawing.registerDrawing(
+      "rainy-blink",
+      Drawing(12, [
+        _space_, _space_, _space_, _space_, 625.250, 750.250, 750.250, 750.375, _space_, _space_, _space_, _space_,
+        _space_, _space_, _space_, 125.500, _space_, _space_, _space_, _space_, 875.500, 625.250, 750.375, _space_,
+        _space_, 625.250, 750.250, 750.375, _space_, _space_, _space_, _space_, 000.625, _space_, _space_, 875.500,
+        125.500, _space_, _space_, _space_, 865.500, _space_, _space_, 125.125, _space_, _space_, _space_, 625.000,
+        000.375, _space_, _space_, _space_, _space_, _space_, _space_, 625.000, 750.250, 750.250, 750.125, _space_,
+        _space_, 875.250, 750.250, 750.250, 750.250, 750.250, 750.125, 125.625, _space_, 125.625, _space_, _space_,
+        _space_, _space_, 125.625, _space_, 125.625, _space_, 125.625, _space_, 125.625, _space_, _space_, _space_,
+        _space_, 125.625, _space_, 125.625, _space_, 125.625, _space_, _space_, _space_, _space_, _space_, _space_,
+      ]));
+  Drawing.registerDrawing(
       "sunny",
+      Drawing(6, [
+        875.375, _space_, 500.435, 565.500, _space_, 625.125,
+        _space_, 875.875, 685.190, 810.315, 125.125, _space_,
+        250.315, 065.560, _space_, _space_, 935.460, 685.750,
+        195.250, 940.435, _space_, _space_, 565.060, 815.750,
+        _space_, 625.625, 815.310, 690.185, 375.375, _space_,
+        625.125, _space_, 000.065, 935.000, _space_, 875.375,
+      ]));
+  Drawing.registerDrawing(
+      "sunny-blink",
       Drawing(6, [
         875.375, _space_, 500.435, 565.500, _space_, 625.125,
         _space_, 875.875, 625.250, 750.375, 125.125, _space_,
@@ -206,12 +277,26 @@ class Drawing {
 
   static void registerDrawing(String key, Drawing code) => _drawings[key] = code;
 
-  static Drawing fromKey(String key) => _drawings[key];
+  static Drawing fromKey(String key) {
+    var drawing = _drawings[key];
+    if (drawing == null) {
+      throw Exception("'$key' drawing is not registered");
+    }
+    return drawing;
+  }
 
   static List<Drawing> fromTime(DateTime time, String timeFormatSeparator) {
     String date = DateFormat('kk:mm').format(time);
     var hm = date.split(":");
-    return fromCharacters("${hm[0]}${timeFormatSeparator}${hm[1]}");
+    return fromCharacters(hm[0])
+      ..add(fromKey(timeFormatSeparator))
+      ..addAll(fromCharacters(hm[1]));
+  }
+
+  static List<Drawing> fromTemperature(num temperature, String degreeKey, TemperatureUnit unit) {
+    return fromCharacters("${temperature.round()}")
+      ..add(fromKey(degreeKey))
+      ..addAll(fromCharacters(unit == TemperatureUnit.celsius ? "c" : "f"));
   }
 
   static List<Drawing> fromCharacters(String characters) {

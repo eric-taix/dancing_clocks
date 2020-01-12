@@ -9,63 +9,71 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_clock_helper/model.dart';
 
+import 'animation_list.dart';
+
 class ClockAnimationProvider {
   final int width;
   final int height;
   final ClockModel model;
   final ClockAnimationController animationController;
 
-  List<ClockImage> _images;
+  AnimationList animationList;
 
   ClockAnimationProvider(this.model, this.width, this.height, SingleTickerProviderStateMixin ticker)
       : animationController = new ClockAnimationController(
           vsync: ticker,
-          duration: new Duration(seconds: 30),
+          duration: new Duration(seconds: 41),
         ) {
-    _images = List();
     animationController
       ..addStatusListener((state) {
         if (state == AnimationStatus.completed) {
-          prepareNextCycle();
+          animationController.duration = _prepareNextCycle();
+          //animationController.duration = Duration(seconds: 4);
           animationController.notifyHandStatusListeners(state);
           animationController.reset();
           animationController.forward();
         }
       });
-    prepareNextCycle();
+    animationController.duration = _prepareNextCycle();
+    //animationController.duration = Duration(seconds: 4);
     animationController.forward();
   }
 
-  void prepareNextCycle() {
-    _images.clear();
-       _images.addAll(_buildTimeAnimation(
-      initialDuration: Duration(seconds: 4),
-      blinkDuration: Duration(seconds: 6),
-    ));
-    // 12 seconds
-    _images.addAll(_buildDancingAnimation(Duration(seconds: 2)));
-    _images.addAll(_buildDancingAnimation(Duration(seconds: 2)));
-   /* _images.addAll(_buildDancingAnimation(Duration(seconds: 3)));
-    _images.addAll(_buildDancingAnimation(Duration(seconds: 3)));
-    _images.addAll(_buildDancingAnimation(Duration(seconds: 3))); */
-    _images.add(
-      ClockImage(
-        width,
-        height,
-        Duration(seconds: 4),
-        ClockWiseDirection.Shortest,
-        [Drawing.fromKey(model.weatherString)],
-        pause: Duration(seconds: 2),
-      ),
+  Duration _prepareNextCycle() {
+    var dancingDuration = Duration(milliseconds: 3000);
+
+    animationList = AnimationList(width, height);
+ /*    _buildTimeAnimation(
+      duration: Duration(seconds: 2),
+      animationCount: 4,
+    );*/
+    _buildDancingAnimation(
+      duration: dancingDuration,
+      dancingCount: 8,
     );
-    // 12 seconds
-    _images.addAll(_buildDancingAnimation(Duration(seconds: 2)));
-    _images.addAll(_buildDancingAnimation(Duration(seconds: 2)));
+   /* _buildTemperatureAnimation(
+      duration: Duration(seconds: 2),
+      animationCount: 4,
+    );
+    _buildDancingAnimation(
+      duration: dancingDuration,
+      dancingCount: 8,
+    );
+    _buildWeatherAnimation(
+      weatherName: model.weatherString,
+      duration: Duration(seconds: 2),
+      animationCount: 4,
+    );
+    _buildDancingAnimation(
+      duration: dancingDuration,
+      dancingCount: 8,
+    );*/
+    return animationList.totalDuration;
   }
 
   Animation<double> getHandAnimation(Coordinates coord, double fromRadian) {
     var builder = ClockTweenBuilder(fromRadian, animationController.duration);
-    _images.forEach((image) {
+    animationList.images.forEach((image) {
       var angle = coord.coordType == CoordType.hours ? image.getPixelsAt(coord).hoursAngle : image.getPixelsAt(coord).minutesAngle;
       return builder.addTween(angle, image.duration, direction: image.direction, pause: image.pause, curve: image.curve);
     });
@@ -73,32 +81,38 @@ class ClockAnimationProvider {
     return builder.build(animationController);
   }
 
-  List<ClockImage> _buildTimeAnimation({Duration initialDuration, Duration blinkDuration}) {
+  void _buildTimeAnimation({Duration duration, int animationCount}) {
     var time = DateTime.now();
-    return List.generate(
-        blinkDuration.inSeconds,
+    List.generate(
+        animationCount + 1,
         (index) => index % 2 == 0
-            ? ClockImage(
-                width,
-                height,
-                index == 0 ? initialDuration : Duration(seconds: 1),
-                ClockWiseDirection.Shortest,
-                Drawing.fromTime(time, colon),
-              )
-            : ClockImage(
-                width,
-                height,
-                Duration(seconds: 1),
-                ClockWiseDirection.Shortest,
-                Drawing.fromTime(time, colonBlink),
-              ));
+            ? animationList.addImage(Drawing.fromTime(time, colon), index == 0 ? duration : Duration(seconds: 1))
+            : animationList.addImage(Drawing.fromTime(time, colonBlink), Duration(seconds: 1)));
   }
 
-  List<ClockImage> _buildDancingAnimation(Duration duration) {
-    var drawingGenerator = DrawingGenerator(width, height);
-    return [
-      ClockImage(width, height, duration, ClockWiseDirection.Shortest, [drawingGenerator.generate()], curve: Curves.easeInOut),
-      ClockImage(width, height, duration, ClockWiseDirection.Shortest, [drawingGenerator.generateDivergedFromPrevious()], curve: Curves.easeInOut),
-    ];
+  void _buildWeatherAnimation({String weatherName, Duration duration, int animationCount}) {
+    for (int index = 0; index < animationCount; index++) {
+      animationList.addImage([Drawing.fromKey(weatherName)], index == 0 ? duration : Duration(seconds: 1));
+      animationList.addImage([Drawing.fromKey("$weatherName-blink")], index == 0 ? duration : Duration(seconds: 1));
+    }
+  }
+
+  void _buildDancingAnimation({Duration duration, int dancingCount}) {
+    for (int index = 0; index < dancingCount; index++) {
+      animationList.addImage(
+        [DrawingGenerator(width, height).generate()],
+        duration,
+        curve: Curves.easeInOut,
+        direction: ClockWiseDirection.Shortest,
+        pause: Duration(seconds: 1),
+      );
+    }
+  }
+
+  void _buildTemperatureAnimation({Duration duration, int animationCount}) {
+    for (int index = 0; index < animationCount; index++) {
+      animationList.addImage(Drawing.fromTemperature(model.temperature, degree, model.unit), index == 0 ? duration : Duration(seconds: 1));
+      animationList.addImage(Drawing.fromTemperature(model.temperature, degreeBlink, model.unit), index == 0 ? duration : Duration(seconds: 1));
+    }
   }
 }

@@ -11,22 +11,14 @@ class DrawingGenerator {
 
   DrawingGenerator(this._width, this._height) {
     _angle = AngleGenerator().generate();
-    _distributor = AngleDistributor(_width, _height);
+    _distributor = AngleDistributor(width: _width, height: _height);
   }
 
   Drawing generate() {
     return Drawing(
         _width,
         List.generate(_width * _height, (index) {
-          return _distributor.getMirroredFromAngle(Point(index % _width, index ~/ _width), _angle);
-        }));
-  }
-
-  Drawing generateDivergedFromPrevious() {
-    return Drawing(
-        _width,
-        List.generate(_width * _height, (index) {
-          return _distributor.getDivergedFromAngle(Point(index % _width, index ~/ _width), _angle);
+          return _distributor.getAngle(Point(index % _width, index ~/ _width), _angle);
         }));
   }
 }

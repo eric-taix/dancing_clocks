@@ -6,7 +6,12 @@ class ClockwiseDirectionTween extends Tween<double> {
   static final math.Random _random = math.Random(42);
 
   factory ClockwiseDirectionTween.from(double begin, double end, {ClockWiseDirection direction = ClockWiseDirection.Random}) {
-    
+    while (begin > 2 * math.pi) {
+      begin -= 2 * math.pi;
+    }
+    while (end > 2 * math.pi) {
+      end -= 2 * math.pi;
+    }
     var computedEnd = end;
     switch (direction) {
       case ClockWiseDirection.ClockWise:
@@ -27,6 +32,9 @@ class ClockwiseDirectionTween extends Tween<double> {
         } else {
           computedEnd = end < begin ? end + math.pi * 2 : end - math.pi * 2;
         }
+    }
+    if (begin - computedEnd > math.pi) {
+      print("A big travel");
     }
     return ClockwiseDirectionTween._(begin, computedEnd);
   }

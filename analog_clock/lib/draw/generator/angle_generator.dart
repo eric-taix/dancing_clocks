@@ -6,9 +6,9 @@ final Random _random = Random(42);
 class AngleGenerator {
 
   final List<_Generator> _generators = [
-    _RandomAngleGenerator(),
-    _CornerAngleGenerator(),
-    _FlatGenerator(),
+    RandomAngleGenerator(),
+    CornerAngleGenerator(),
+    FlatGenerator(),
   ];
 
   double generate() => _generators[_random.nextInt(_generators.length)].get();
@@ -20,12 +20,12 @@ abstract class _Generator {
   double get();
 }
 
-class _RandomAngleGenerator implements _Generator {
+class RandomAngleGenerator implements _Generator {
   @override
   double get() => _random.nextInt(1000) + (_random.nextInt(1000) / 1000);
 }
 
-class _CornerAngleGenerator implements _Generator {
+class CornerAngleGenerator implements _Generator {
 
   @override
   double get() {
@@ -34,7 +34,7 @@ class _CornerAngleGenerator implements _Generator {
   }
 }
 
-class _FlatGenerator implements _Generator {
+class FlatGenerator implements _Generator {
 
   @override
   double get() {
