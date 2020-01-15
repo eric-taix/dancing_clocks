@@ -1,26 +1,40 @@
+import 'package:analog_clock/theming.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class ClockFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var theming = Theming.of(context);
     return Center(
       child: Container(
         padding: EdgeInsets.all(5.0),
         child: Container(
-          decoration: new BoxDecoration(
-            color: Color(0xFFF5F5F5),
-            shape: BoxShape.circle,
-            boxShadow: [
-              new CustomBoxShadow(
-                color: Colors.black,
-                blurRadius: 40.0,
-                offset: new Offset(2.0, 3.0),
-                blurStyle: BlurStyle.inner,
+            decoration: new BoxDecoration(
+              color: theming.backgroundColor,
+              shape: BoxShape.circle,
+              boxShadow: [
+                new CustomBoxShadow(
+                  color: theming.counterShadow,
+                  blurRadius: 4.0,
+                  offset: new Offset(-4.0, -4.0),
+                  blurStyle: BlurStyle.normal,
+                ),
+                new CustomBoxShadow(
+                  color: theming.handColor,
+                  blurRadius: 2.0,
+                  offset: new Offset(2.0, 3.0),
+                  blurStyle: BlurStyle.normal,
+                ),
+              ],
+            ),
+            child: Container(
+              margin: EdgeInsets.all(5.0),
+              decoration: new BoxDecoration(
+                color: theming.backgroundColor,
+                shape: BoxShape.circle,
               ),
-            ],
-          ),
-        ),
+            )),
       ),
     );
   }

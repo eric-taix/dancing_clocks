@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 enum _Element {
   handColor, 
   backgroundColor,
+  counterShadow,
 }
 
 final _lightTheme = {
-  _Element.handColor: Color(0xFF231f20),
-  _Element.backgroundColor: Color(0xFFfafafa),
+  _Element.handColor: Color(0xFF464c5e), //Color(0xFF231f20),
+  _Element.backgroundColor: Color(0xFFFBFBFB),
+  _Element.counterShadow: Colors.white
+
 };
 
 final _darkTheme = {
@@ -24,6 +27,7 @@ class Theming {
 
   Color get handColor => _colors[_Element.handColor];
   Color get backgroundColor => _colors[_Element.backgroundColor];
+  Color get counterShadow => _colors[_Element.counterShadow];
 
   Theming(this._colors);
 

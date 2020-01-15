@@ -1,6 +1,7 @@
 import 'package:analog_clock/animation/clock_builder.dart';
 import 'package:analog_clock/landscape.dart';
 import 'package:analog_clock/animation/clock_animation_provider.dart';
+import 'package:analog_clock/theming.dart';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
@@ -36,13 +37,16 @@ class _DancingClockState extends State<DancingClock> with SingleTickerProviderSt
   Widget build(BuildContext context) {
     final time = DateFormat.Hms().format(DateTime.now());
 
-    return Semantics.fromProperties(
-      properties: SemanticsProperties(
-        label: 'Dancing clock with time $time',
-        value: time,
-      ),
-      child: Center(
-        child: ClockBuilder(columns, rows, widget.model, _clockAnimationProvider),
+    return Container(
+      decoration: new BoxDecoration(color: Theming.of(context).backgroundColor),
+      child: Semantics.fromProperties(
+        properties: SemanticsProperties(
+          label: 'Dancing clock with time $time',
+          value: time,
+        ),
+        child: Center(
+          child: ClockBuilder(columns, rows, widget.model, _clockAnimationProvider),
+        ),
       ),
     );
   }

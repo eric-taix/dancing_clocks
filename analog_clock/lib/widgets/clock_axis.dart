@@ -9,8 +9,8 @@ class ClockAxis extends StatelessWidget {
     var theming = Theming.of(context);
     return Center(
       child: Container(
-        width: 4,
-        height: 4,
+        width: 5,
+        height: 5,
         decoration: new BoxDecoration(
           color: theming.backgroundColor,
           shape: BoxShape.circle,
