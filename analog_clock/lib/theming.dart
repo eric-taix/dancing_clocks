@@ -11,7 +11,7 @@ enum _Element {
 final _lightTheme = {
   _Element.handColor: Colors.black87, //Color(0xFF464c5e),
   _Element.backgroundColor: Color(0xFFFBFBFB),
-  _Element.shadow: Color(0xFF464c5e),
+  _Element.shadow: Color(0xFFA6AcBe),
   _Element.handShadow: Color(0xFF464c5e),
 };
 
