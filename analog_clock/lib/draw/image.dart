@@ -5,7 +5,7 @@ import 'package:analog_clock/draw/coordinates.dart';
 import 'package:analog_clock/draw/drawing.dart';
 import 'package:flutter/animation.dart';
 
-class ClockImage {
+class Image {
   final int width;
   final int height;
   final Duration duration;
@@ -14,7 +14,7 @@ class ClockImage {
   final Curve curve;
   List<List<Angle>> _pixels;
 
-  ClockImage(this.width, this.height, this.duration, this.direction, List<Drawing> drawings,
+  Image(this.width, this.height, this.duration, this.direction, List<Drawing> drawings,
       {this.pause, math.Point<int> position, this.curve = Curves.easeInOut}) {
     _clear();
     if (position == null) {
@@ -49,6 +49,8 @@ class ClockImage {
     var drawingHeight = drawings.fold(0, (acc, drawing) => drawing.height > acc ? drawing.height : acc);
     var paddingX = (width - drawingsWidth) ~/ 2;
     var paddingY = (height - drawingHeight) ~/ 2;
+    paddingY = paddingY + ((height - drawingHeight) % 2 != 0 ? 1 : 0);
+    paddingX = paddingX + ((width - drawingsWidth) % 2 != 0 ? 1 : 0);
     return math.Point(paddingX, paddingY);
   }
 

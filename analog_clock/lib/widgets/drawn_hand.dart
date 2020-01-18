@@ -22,15 +22,19 @@ class DrawnHand extends Hand {
     @required this.thickness,
     @required double size,
     @required double angleRadians,
-  })  : assert(color != null),
+    @required Color shadowColor,
+  })
+      : assert(color != null),
+        assert(shadowColor != null),
         assert(thickness != null),
         assert(size != null),
         assert(angleRadians != null),
         super(
-          color: color,
-          size: size,
-          angleRadians: angleRadians,
-        );
+        color: color,
+        shadowColor: shadowColor,
+        size: size,
+        angleRadians: angleRadians,
+      );
 
   /// How thick the hand should be drawn, in logical pixels.
   final double thickness;
@@ -42,10 +46,11 @@ class DrawnHand extends Hand {
         child: CustomPaint(
           painter: _HandPainter(
             // Remove some margin to draw the shadow
-            handSize: size-0.25,
+            handSize: size - 0.25,
             lineWidth: thickness,
             angleRadians: angleRadians,
             color: color,
+            shadowColor: shadowColor,
           ),
         ),
       ),
@@ -60,10 +65,13 @@ class _HandPainter extends CustomPainter {
     @required this.lineWidth,
     @required this.angleRadians,
     @required this.color,
-  })  : assert(handSize != null),
+    @required this.shadowColor,
+  })
+      : assert(handSize != null),
         assert(lineWidth != null),
         assert(angleRadians != null),
         assert(color != null),
+        assert(shadowColor != null),
         assert(handSize >= 0.0),
         assert(handSize <= 1.0);
 
@@ -71,6 +79,7 @@ class _HandPainter extends CustomPainter {
   double lineWidth;
   double angleRadians;
   Color color;
+  Color shadowColor;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -89,20 +98,17 @@ class _HandPainter extends CustomPainter {
     final positionShadow = centerShadow + dest;
     var path = Path()
       ..moveTo(centerShadow.dx, centerShadow.dy)
-      ..lineTo(positionShadow.dx, positionShadow.dy)
-      ..lineTo(positionShadow.dx, positionShadow.dy+lineWidth)
-      ..lineTo(centerShadow.dx, centerShadow.dy+lineWidth)
+      ..lineTo(positionShadow.dx, positionShadow.dy)..lineTo(positionShadow.dx, positionShadow.dy + lineWidth)..lineTo(
+          centerShadow.dx, centerShadow.dy + lineWidth)
       ..close();
-    canvas.drawShadow(path, color, 5.0, true);
+    canvas.drawShadow(path, shadowColor, 5.0, true);
     canvas.drawLine(center, position, linePaint);
   }
 
   @override
   bool shouldRepaint(_HandPainter oldDelegate) {
-    var result = oldDelegate.handSize != handSize ||
-        oldDelegate.lineWidth != lineWidth ||
-        oldDelegate.angleRadians != angleRadians ||
-        oldDelegate.color != color;
+    var result =
+        oldDelegate.handSize != handSize || oldDelegate.lineWidth != lineWidth || oldDelegate.angleRadians != angleRadians || oldDelegate.color != color;
     return result;
   }
 }

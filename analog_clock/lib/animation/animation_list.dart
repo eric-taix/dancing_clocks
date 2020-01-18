@@ -8,17 +8,17 @@ import 'clockwise_direction_tween.dart';
 class AnimationList {
   final int _width;
   final int _height;
-  final _images = List<ClockImage>();
+  final _images = List<Image>();
   Duration _totalDuration = Duration();
 
   Duration get totalDuration => _totalDuration;
-  List<ClockImage> get images => _images;
+  List<Image> get images => _images;
 
   AnimationList(this._width, this._height);
 
   void addImage(List<Drawing> drawings, Duration duration,
       {ClockWiseDirection direction = ClockWiseDirection.Shortest, Duration pause, Curve curve = Curves.easeInOut}) {
-    _images.add(ClockImage(
+    _images.add(Image(
       _width,
       _height,
       duration,

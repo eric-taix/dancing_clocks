@@ -3,16 +3,16 @@ import 'package:flutter/widgets.dart';
 
 import 'clockwise_direction_tween.dart';
 
-class ClockTweenBuilder {
+class AngleTweenBuilder {
   double _start;
   Duration _cumulatedDuration = Duration(seconds: 0);
-  Duration _animationDuration;
+  ClockAnimationController _animationController;
 
-  ClockTweenBuilder(this._start, this._animationDuration);
+  AngleTweenBuilder(this._start, this._animationController);
 
   final List<TweenSequenceItem<double>> _items = List();
 
-  void addTween(double end, Duration duration, {ClockWiseDirection direction = ClockWiseDirection.Shortest, Curve curve = Curves.easeInOut, Duration pause}) {
+  void addAngleTween(double end, Duration duration, {ClockWiseDirection direction = ClockWiseDirection.Shortest, Curve curve = Curves.easeInOut, Duration pause}) {
     _cumulatedDuration += duration;
     _items.add(TweenSequenceItem(
         tween: ClockwiseDirectionTween.from(
@@ -31,16 +31,16 @@ class ClockTweenBuilder {
     _start = end;
   }
 
-  Animation<double> build(ClockAnimationController controller) {
-    print("Animation duration: ${_animationDuration.inMilliseconds} / Cumulative duration: ${_cumulatedDuration.inMilliseconds}");
-    if (_cumulatedDuration < _animationDuration) {
+  Animation<double> build() {
+    print("Animation duration: ${_animationController.duration.inMilliseconds} / Cumulative duration: ${_cumulatedDuration.inMilliseconds}");
+    if (_cumulatedDuration < _animationController.duration) {
       _items.add(TweenSequenceItem(
         tween: ClockwiseDirectionTween.from(_start, _start, direction: ClockWiseDirection.DontChange),
-        weight: _duration2Weight(_animationDuration - _cumulatedDuration),
+        weight: _duration2Weight(_animationController.duration - _cumulatedDuration),
       ));
     }
-    return TweenSequence(_items).animate(controller);
+    return TweenSequence(_items).animate(_animationController);
   }
 
-  double _duration2Weight(Duration duration) => (duration.inMilliseconds * 1000) / _animationDuration.inMilliseconds;
+  double _duration2Weight(Duration duration) => (duration.inMilliseconds * 1000) / _animationController.duration.inMilliseconds;
 }

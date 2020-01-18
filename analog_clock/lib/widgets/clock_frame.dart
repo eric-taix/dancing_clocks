@@ -15,15 +15,9 @@ class ClockFrame extends StatelessWidget {
               shape: BoxShape.circle,
               boxShadow: [
                 new CustomBoxShadow(
-                  color: theming.counterShadow,
-                  blurRadius: 4.0,
-                  offset: new Offset(-4.0, -4.0),
-                  blurStyle: BlurStyle.normal,
-                ),
-                new CustomBoxShadow(
-                  color: theming.handColor,
+                  color: theming.shadowColor,
                   blurRadius: 2.0,
-                  offset: new Offset(2.0, 3.0),
+                  offset: new Offset(1.0, 1.0),
                   blurStyle: BlurStyle.normal,
                 ),
               ],

@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 
 const double pi = 3.1415926535897932;
 
-const _space_ = 625.625;
+const _space_ = null; //625.625;
 
 /// A character is defined by
 /// - a width (number of clocks in the horizontal axis)
@@ -39,7 +39,7 @@ const String degree = "°";
 const String degreeBlink = "°-blink";
 
 void registerDrawings() {
-  Drawing.registerDrawing(" ", Drawing(1, [625.625]));
+  Drawing.registerDrawing(" ", Drawing(1, [_space_]));
   Drawing.registerDrawing(colon,
       Drawing(2, [
         _space_, _space_, // Avoid formatting to preserve expressivity
@@ -207,13 +207,37 @@ void registerDrawings() {
   Drawing.registerDrawing(
       "cloudy-blink",
       Drawing(12, [
-        _space_, _space_, _space_, _space_, 625.250, 750.250, 750.250, 750.375, _space_, _space_, _space_, _space_,
-        _space_, _space_, _space_, 125.500, _space_, _space_, _space_, _space_, 875.500, 625.250, 750.375, _space_,
-        _space_, 625.250, 750.250, 750.375, _space_, _space_, _space_, _space_, 000.625, _space_, _space_, 875.500,
-        125.500, _space_, _space_, _space_, 865.500, _space_, _space_, 125.125, _space_, _space_, _space_, 625.000,
-        000.375, _space_, _space_, _space_, _space_, _space_, _space_, 625.000, 750.250, 750.250, 750.125, _space_,
-        _space_, 875.250, 750.250, 750.250, 750.250, 750.250, 750.125, _space_, _space_, _space_, _space_, _space_,
+        _space_, _space_, _space_, _space_, 685.250, 750.250, 750.250, 750.315, _space_, _space_, _space_, _space_,
+        _space_, _space_, _space_, 65.500, _space_, _space_, _space_, _space_, 935.500, 685.190, 810.315, _space_,
+        _space_, 685.250, 750.250, 750.315, _space_, _space_, _space_, _space_, 000.565, _space_, _space_, 935.460,
+        065.560, _space_, _space_, _space_, 925.460, _space_, _space_, 185.185, _space_, _space_, _space_, 565.060,
+        940.435, _space_, _space_, _space_, _space_, _space_, _space_, 565.060, 750.250, 750.250, 750.185, _space_,
+        _space_, 815.250, 750.250, 750.250, 750.250, 750.250, 750.185, _space_, _space_, _space_, _space_, _space_,
       ]));
+
+  Drawing.registerDrawing(
+      "foggy",
+      Drawing(12, [
+        _space_, _space_, _space_, _space_, _space_, _space_, 625.250, 750.250, 375.750, _space_, _space_, _space_,
+        _space_, _space_, _space_, 625.250, 750.375, 500.125, _space_, _space_, _space_, 500.875, _space_, _space_,
+        _space_, _space_, 375.125, _space_, _space_, _space_, _space_, _space_, _space_, 625.000, _space_, _space_,
+        _space_, _space_, _space_, 875.250, 750.250, 750.250, 750.250, 750.250, 750.125, _space_, _space_, _space_,
+        _space_, _space_, _space_, 750.250, 750.250, 750.250, 750.250, 750.250, 750.250, 750.250, _space_, _space_,
+        _space_, _space_, 750.250, 750.250, 750.250, 750.250, 750.250, 750.250, _space_, _space_, _space_, _space_,
+        _space_, _space_, _space_, _space_, _space_, 750.250, 750.250, 750.250, 750.250, _space_, _space_, _space_,
+      ]));
+  Drawing.registerDrawing(
+      "foggy-blink",
+      Drawing(12, [
+        _space_, _space_, _space_, _space_, _space_, _space_, 685.250, 750.250, 315.750, _space_, _space_, _space_,
+        _space_, _space_, _space_, 685.250, 750.315, 560.065, _space_, _space_, _space_, 500.935, _space_, _space_,
+        _space_, _space_, 440.060, _space_, _space_, _space_, _space_, _space_, _space_, 560.000, _space_, _space_,
+        _space_, _space_, _space_, 815.250, 750.250, 750.250, 750.250, 750.250, 750.185, _space_, _space_, _space_,
+        _space_, _space_, _space_, 750.250, 750.250, 750.250, 750.250, 750.250, 750.250, 750.250, _space_, _space_,
+        _space_, _space_, 750.250, 750.250, 750.250, 750.250, 750.250, 750.250, _space_, _space_, _space_, _space_,
+        _space_, _space_, _space_, _space_, _space_, 750.250, 750.250, 750.250, 750.250, _space_, _space_, _space_,
+      ]));
+
   Drawing.registerDrawing(
       "rainy",
       Drawing(12, [
@@ -222,42 +246,120 @@ void registerDrawings() {
         _space_, 625.250, 750.250, 750.375, _space_, _space_, _space_, _space_, 000.625, _space_, _space_, 875.500,
         125.500, _space_, _space_, _space_, 865.500, _space_, _space_, 125.125, _space_, _space_, _space_, 625.000,
         000.375, _space_, _space_, _space_, _space_, _space_, _space_, 625.000, 750.250, 750.250, 750.125, _space_,
-        _space_, 875.250, 750.250, 750.250, 750.250, 750.250, 750.125, 125.625, _space_, 125.625, _space_, _space_,
-        _space_, _space_, 125.625, _space_, 125.625, _space_, 125.625, _space_, 125.625, _space_, _space_, _space_,
-        _space_, 125.625, _space_, 125.625, _space_, 125.625, _space_, _space_, _space_, _space_, _space_, _space_,
+        _space_, 875.250, 750.250, 750.250, 750.250, 750.250, 750.125, 625.125, _space_, 625.125, _space_, _space_,
+        _space_, _space_, 625.125, _space_, 625.125, _space_, 625.125, _space_, 625.125, _space_, _space_, _space_,
+        _space_, _space_, _space_, 625.125, _space_, 625.125, _space_, _space_, _space_, _space_, _space_, _space_,
       ]));
   Drawing.registerDrawing(
       "rainy-blink",
       Drawing(12, [
-        _space_, _space_, _space_, _space_, 625.250, 750.250, 750.250, 750.375, _space_, _space_, _space_, _space_,
-        _space_, _space_, _space_, 125.500, _space_, _space_, _space_, _space_, 875.500, 625.250, 750.375, _space_,
-        _space_, 625.250, 750.250, 750.375, _space_, _space_, _space_, _space_, 000.625, _space_, _space_, 875.500,
-        125.500, _space_, _space_, _space_, 865.500, _space_, _space_, 125.125, _space_, _space_, _space_, 625.000,
-        000.375, _space_, _space_, _space_, _space_, _space_, _space_, 625.000, 750.250, 750.250, 750.125, _space_,
-        _space_, 875.250, 750.250, 750.250, 750.250, 750.250, 750.125, 125.625, _space_, 125.625, _space_, _space_,
-        _space_, _space_, 125.625, _space_, 125.625, _space_, 125.625, _space_, 125.625, _space_, _space_, _space_,
-        _space_, 125.625, _space_, 125.625, _space_, 125.625, _space_, _space_, _space_, _space_, _space_, _space_,
+        _space_, _space_, _space_, _space_, 685.250, 750.250, 750.250, 750.315, _space_, _space_, _space_, _space_,
+        _space_, _space_, _space_, 065.500, _space_, _space_, _space_, _space_, 935.500, 685.250, 750.315, _space_,
+        _space_, 685.250, 750.250, 750.315, _space_, _space_, _space_, _space_, 000.565, _space_, _space_, 935.500,
+        125.500, _space_, _space_, _space_, 935.500, _space_, _space_, 185.185, _space_, _space_, _space_, 565.000,
+        000.435, _space_, _space_, _space_, _space_, _space_, _space_, 565.000, 750.250, 750.250, 750.185, _space_,
+        _space_, 815.250, 750.250, 750.250, 750.250, 750.250, 750.185, 625.125, _space_, 625.125, _space_, _space_,
+        _space_, _space_, 625.125, _space_, 625.125, _space_, 625.125, _space_, 625.125, _space_, _space_, _space_,
+        _space_, _space_, _space_, 625.125, _space_, 625.125, _space_, _space_, _space_, _space_, _space_, _space_,
+      ]));
+  Drawing.registerDrawing(
+      "snowy",
+      Drawing(7, [
+        _space_, _space_, _space_, 875.125, _space_, _space_, _space_,
+        _space_, 750.000, _space_, 000.500, _space_, 000.250, _space_,
+        _space_, _space_, 375.875, 625.375, 125.625, _space_, _space_,
+        875.625, 750.250, 125.375, _space_, 875.625, 750.250, 125.375,
+        _space_, _space_, 625.125, 125.875, 375.875, _space_, _space_,
+        _space_, 500.750, _space_, 000.500, _space_, 250.500, _space_,
+        _space_, _space_, _space_, 375.625, _space_, _space_, _space_,
+      ]));
+  Drawing.registerDrawing(
+      "snowy-blink",
+      Drawing(7, [
+        _space_, _space_, _space_, 875.125, _space_, _space_, _space_,
+        _space_, 750.000, _space_, 000.500, _space_, 000.250, _space_,
+        _space_, _space_, 375.875, 685.315, 125.625, _space_, _space_,
+        875.625, 750.250, 065.435, _space_, 935.565, 750.250, 125.375,
+        _space_, _space_, 625.125, 185.815, 375.875, _space_, _space_,
+        _space_, 500.750, _space_, 000.500, _space_, 250.500, _space_,
+        _space_, _space_, _space_, 375.625, _space_, _space_, _space_,
       ]));
   Drawing.registerDrawing(
       "sunny",
       Drawing(6, [
-        875.375, _space_, 500.435, 565.500, _space_, 625.125,
+        _space_, _space_, 500.435, 565.500, _space_, _space_,
         _space_, 875.875, 685.190, 810.315, 125.125, _space_,
         250.315, 065.560, _space_, _space_, 935.460, 685.750,
         195.250, 940.435, _space_, _space_, 565.060, 815.750,
         _space_, 625.625, 815.310, 690.185, 375.375, _space_,
-        625.125, _space_, 000.065, 935.000, _space_, 875.375,
+        _space_, _space_, 000.065, 935.000, _space_, _space_,
       ]));
   Drawing.registerDrawing(
       "sunny-blink",
       Drawing(6, [
-        875.375, _space_, 500.435, 565.500, _space_, 625.125,
+        _space_, _space_, 467.467, 532.532, _space_, _space_,
         _space_, 875.875, 625.250, 750.375, 125.125, _space_,
-        250.315, 125.500, _space_, _space_, 875.500, 685.750,
-        195.250, 000.375, _space_, _space_, 625.000, 815.750,
+        282.282, 125.500, _space_, _space_, 875.500, 717.717,
+        227.227, 000.375, _space_, _space_, 625.000, 782.782,
         _space_, 625.625, 875.250, 750.125, 375.375, _space_,
-        625.125, _space_, 000.065, 935.000, _space_, 875.375,
+        _space_, _space_, 032.032, 967.967, _space_, _space_,
       ]));
+
+  Drawing.registerDrawing(
+      "thunderstorm",
+      Drawing(11, [
+        _space_, _space_, _space_, _space_, _space_, _space_, 625.250, 750.250, 750.250, 375.750, _space_,
+        _space_, _space_, 625.250, 750.250, 750.375, 500.125, _space_, _space_, _space_, _space_, 500.875,
+        _space_, 500.125, _space_, _space_, _space_, _space_, _space_, _space_, _space_, _space_, 000.500,
+        _space_, 000.375, _space_, _space_, _space_, 625.250, 750.625, _space_, _space_, _space_, 625.000,
+        _space_, 625.625, 875.250, 750.250, 125.625, 125.625, 750.250, 750.250, 750.250, 750.125, _space_,
+        125.250, 750.625, _space_, 125.625, 125.250, 750.250, 750.625, _space_, 625.625, _space_, _space_,
+        125.125, _space_, 125.250, 750.250, 750.625, 125.625, _space_, 125.250, 750.625, _space_, _space_,
+        _space_, _space_, _space_, 125.625, 125.625, _space_, _space_, 125.125, _space_, _space_, _space_,
+        _space_, _space_, 125.250, 125.750, _space_, _space_, _space_, _space_, _space_, _space_, _space_,
+      ]));
+
+  Drawing.registerDrawing(
+      "thunderstorm-blink",
+      Drawing(11, [
+        _space_, _space_, _space_, _space_, _space_, _space_, 685.250, 750.250, 750.250, 315.750, _space_,
+        _space_, _space_, 685.250, 750.250, 750.315, 500.065, _space_, _space_, _space_, _space_, 500.935,
+        _space_, 500.065, _space_, _space_, _space_, _space_, _space_, _space_, _space_, _space_, 000.500,
+        _space_, 000.435, _space_, _space_, _space_, 625.250, 750.625, _space_, _space_, _space_, 565.000,
+        _space_, 625.625, 815.250, 750.250, 125.625, 125.625, 750.250, 750.250, 750.250, 750.185, _space_,
+        125.250, 750.625, _space_, 125.625, 125.250, 750.250, 750.625, _space_, 625.625, _space_, _space_,
+        125.125, _space_, 125.250, 750.250, 750.625, 125.625, _space_, 125.250, 750.625, _space_, _space_,
+        _space_, _space_, _space_, 125.625, 125.625, _space_, _space_, 125.125, _space_, _space_, _space_,
+        _space_, _space_, 125.250, 125.750, _space_, _space_, _space_, _space_, _space_, _space_, _space_,
+      ]));
+
+  Drawing.registerDrawing(
+      "windy",
+      Drawing(11, [
+        _space_, _space_, _space_, _space_, _space_, _space_, _space_, 625.250, 750.375, _space_, _space_,
+        _space_, _space_, _space_, _space_, _space_, _space_, _space_, _space_, 750.375, 875.500, _space_,
+        _space_, _space_, _space_, _space_, _space_, 750.250, 750.250, 750.250, 750.125, 000.625, _space_,
+        _space_, _space_, 750.250, 750.250, 750.250, 750.250, 750.250, 750.250, 750.125, _space_, _space_,
+        750.250, 750.250, 750.250, 750.250, 750.250, 750.250, 750.250, 750.250, 750.250, 750.250, _space_,
+        _space_, _space_, _space_, _space_, 750.250, 750.250, 750.250, 750.250, 750.250, 750.375, _space_,
+        _space_, _space_, _space_, _space_, _space_, _space_, 750.250, 750.250, 750.250, 750.375, 875.500,
+        _space_, _space_, _space_, _space_, _space_, _space_, _space_, _space_, _space_, 750.125, 000.625,
+        _space_, _space_, _space_, _space_, _space_, _space_, _space_, _space_, 875.250, 750.125, _space_,
+      ]));
+  Drawing.registerDrawing(
+      "windy-blink",
+      Drawing(11, [
+        _space_, _space_, _space_, _space_, _space_, _space_, _space_, 685.250, 750.315, _space_, _space_,
+        _space_, _space_, _space_, _space_, _space_, _space_, _space_, _space_, 750.375, 935.500, _space_,
+        _space_, _space_, _space_, _space_, _space_, 750.250, 750.250, 750.250, 750.125, 000.565, _space_,
+        _space_, _space_, 750.250, 750.250, 750.250, 750.250, 750.250, 750.250, 750.185, _space_, _space_,
+        750.250, 750.250, 750.250, 750.250, 750.250, 750.250, 750.250, 750.250, 750.250, 750.250, _space_,
+        _space_, _space_, _space_, _space_, 750.250, 750.250, 750.250, 750.250, 750.250, 750.315, _space_,
+        _space_, _space_, _space_, _space_, _space_, _space_, 750.250, 750.250, 750.250, 750.375, 935.500,
+        _space_, _space_, _space_, _space_, _space_, _space_, _space_, _space_, _space_, 750.125, 000.565,
+        _space_, _space_, _space_, _space_, _space_, _space_, _space_, _space_, 815.250, 750.185, _space_,
+      ]));
+
 }
 
 class Drawing {
@@ -270,9 +372,13 @@ class Drawing {
 
   Drawing(this.width, List<double> definition)
       : pixels = definition.map((value) {
-    var i = value.floor();
-    var d = (value - i) * 1000;
-    return Angle((i * 2 * math.pi / 1000), (d * 2 * math.pi / 1000));
+        if (value != null) {
+          var i = value.floor();
+          var d = (value - i) * 1000;
+          return Angle((i * 2 * math.pi / 1000), (d * 2 * math.pi / 1000));
+        } else {
+          return null;
+        }
   }).toList();
 
   static void registerDrawing(String key, Drawing code) => _drawings[key] = code;

@@ -17,7 +17,7 @@ class DancingClock extends StatefulWidget {
 }
 
 class _DancingClockState extends State<DancingClock> with SingleTickerProviderStateMixin, LandscapeStatefulMixin {
-  static const columns = 14;
+  static const columns = 15;
   static const rows = columns * 3 ~/ 5;
 
   ClockAnimationProvider _clockAnimationProvider;
