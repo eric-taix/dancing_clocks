@@ -1,4 +1,5 @@
 import 'package:analog_clock/theming.dart';
+import 'package:analog_clock/widgets/clock-ticks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -9,26 +10,31 @@ class ClockFrame extends StatelessWidget {
     return Center(
       child: Container(
         padding: EdgeInsets.all(5.0),
-        child: Container(
-            decoration: new BoxDecoration(
-              color: theming.backgroundColor,
-              shape: BoxShape.circle,
-              boxShadow: [
-                new CustomBoxShadow(
-                  color: theming.shadowColor,
-                  blurRadius: 2.0,
-                  offset: new Offset(1.0, 1.0),
-                  blurStyle: BlurStyle.normal,
-                ),
-              ],
-            ),
-            child: Container(
-              margin: EdgeInsets.all(5.0),
+        child: Stack(children: [
+          Container(
               decoration: new BoxDecoration(
                 color: theming.backgroundColor,
                 shape: BoxShape.circle,
+                boxShadow: [
+                  new CustomBoxShadow(
+                    color: theming.shadowColor,
+                    blurRadius: 2.0,
+                    offset: new Offset(1.0, 1.0),
+                    blurStyle: BlurStyle.normal,
+                  ),
+                ],
               ),
-            )),
+              child: Stack(children: [
+                Container(
+                  margin: EdgeInsets.all(5.0),
+                  decoration: new BoxDecoration(
+                    color: theming.backgroundColor,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                ClockTicks(color: theming.shadowColor),
+              ])),
+        ]),
       ),
     );
   }

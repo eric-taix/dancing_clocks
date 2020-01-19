@@ -1,17 +1,17 @@
 import 'package:analog_clock/animation/clock_animation_controller.dart';
 import 'package:flutter/animation.dart';
 
-class ThicknessTweenBuilder {
+class OpacityTweenBuilder {
   final List<TweenSequenceItem<double>> _items = List();
   ClockAnimationController _animationController;
   double _start;
 
-  ThicknessTweenBuilder(this._start, this._animationController);
+  OpacityTweenBuilder(this._start, this._animationController);
 
   void addThicknessTween(double thickness, Duration duration) {
     _items.add(TweenSequenceItem(
         tween: Tween(begin: _start, end: thickness).chain(CurveTween(
-          curve: Curves.easeInCubic,
+          curve: Curves.easeIn,
         )),
         weight: _duration2Weight(duration)));
     _start = thickness;
