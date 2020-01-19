@@ -38,7 +38,9 @@ class _AnimatedHandState extends State<AnimatedHand> {
   }
 
   void statusChanged(AnimationStatus status) {
+    print("status changed");
     if (status == AnimationStatus.completed) {
+      print("status completed");
       _buildTween(animation.angleAnimation.value, animation.thicknessAnimation.value);
     }
   }
