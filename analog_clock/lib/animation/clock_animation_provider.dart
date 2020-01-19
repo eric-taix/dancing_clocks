@@ -108,14 +108,14 @@ class ClockAnimationProvider {
     List.generate(
         animationCount + 1,
         (index) => index % 2 == 0
-            ? animationList.addImage(Drawing.fromTime(time, colon), index == 0 ? duration : blinkDuration)
-            : animationList.addImage(Drawing.fromTime(time, colonBlink), blinkDuration));
+            ? animationList.addImage(Drawing.fromTime(time, colon, model.is24HourFormat), index == 0 ? duration : blinkDuration)
+            : animationList.addImage(Drawing.fromTime(time, colonBlink, model.is24HourFormat), blinkDuration));
     time = time.add(Duration(minutes: 1));
     List.generate(
         animationCount + 1,
         (index) => index % 2 == 0
-            ? animationList.addImage(Drawing.fromTime(time, colon), index == 0 ? duration : blinkDuration)
-            : animationList.addImage(Drawing.fromTime(time, colonBlink), blinkDuration));
+            ? animationList.addImage(Drawing.fromTime(time, colon, model.is24HourFormat), index == 0 ? duration : blinkDuration)
+            : animationList.addImage(Drawing.fromTime(time, colonBlink, model.is24HourFormat), blinkDuration));
   }
 
   void _buildWeatherAnimation({

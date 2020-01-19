@@ -401,8 +401,8 @@ class Drawing {
     return drawing;
   }
 
-  static List<Drawing> fromTime(DateTime time, String timeFormatSeparator) {
-    String date = DateFormat('kk:mm').format(time);
+  static List<Drawing> fromTime(DateTime time, String timeFormatSeparator, bool is24Format) {
+    String date = (is24Format ? DateFormat('kk:mm') : DateFormat('hh:mm')).format(time);
     var hm = date.split(":");
     return fromCharacters(hm[0])
       ..add(fromKey(timeFormatSeparator))
