@@ -5,6 +5,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 
 import 'hand.dart';
 
@@ -22,12 +23,15 @@ class DrawnHand extends Hand {
     @required this.thickness,
     @required double size,
     @required double angleRadians,
+    @required Color shadowColor,
   })  : assert(color != null),
+        assert(shadowColor != null),
         assert(thickness != null),
         assert(size != null),
         assert(angleRadians != null),
         super(
           color: color,
+          shadowColor: shadowColor,
           size: size,
           angleRadians: angleRadians,
         );
@@ -42,10 +46,11 @@ class DrawnHand extends Hand {
         child: CustomPaint(
           painter: _HandPainter(
             // Remove some margin to draw the shadow
-            handSize: size-0.25,
+            handSize: size - 0.25,
             lineWidth: thickness,
             angleRadians: angleRadians,
             color: color,
+            shadowColor: shadowColor,
           ),
         ),
       ),
@@ -55,15 +60,19 @@ class DrawnHand extends Hand {
 
 /// [CustomPainter] that draws a clock hand.
 class _HandPainter extends CustomPainter {
+  static const pi2 = math.pi / 2.0;
+
   _HandPainter({
     @required this.handSize,
     @required this.lineWidth,
     @required this.angleRadians,
     @required this.color,
+    @required this.shadowColor,
   })  : assert(handSize != null),
         assert(lineWidth != null),
         assert(angleRadians != null),
         assert(color != null),
+        assert(shadowColor != null),
         assert(handSize >= 0.0),
         assert(handSize <= 1.0);
 
@@ -71,29 +80,31 @@ class _HandPainter extends CustomPainter {
   double lineWidth;
   double angleRadians;
   Color color;
+  Color shadowColor;
 
   @override
   void paint(Canvas canvas, Size size) {
+    var width = lineWidth;
     final linePaint = Paint()
       ..color = color
-      ..strokeWidth = lineWidth
+      ..strokeWidth = width
       ..strokeCap = StrokeCap.round;
 
-    final center = (Offset(0.0, -0.2) & size).center;
-    final angle = angleRadians - math.pi / 2.0;
+    final center = (Offset.zero & size).center;
+    final angle = angleRadians - pi2;
     final length = size.shortestSide * 0.5 * handSize;
     final dest = Offset(math.cos(angle), math.sin(angle)) * length;
     final position = center + dest;
 
-    final centerShadow = center + Offset(0.0, 0.0);
+    final centerShadow = center + Offset.zero;
     final positionShadow = centerShadow + dest;
     var path = Path()
       ..moveTo(centerShadow.dx, centerShadow.dy)
       ..lineTo(positionShadow.dx, positionShadow.dy)
-      ..lineTo(positionShadow.dx, positionShadow.dy+lineWidth)
-      ..lineTo(centerShadow.dx, centerShadow.dy+lineWidth)
+      ..lineTo(positionShadow.dx, positionShadow.dy + width)
+      ..lineTo(centerShadow.dx, centerShadow.dy + width)
       ..close();
-    canvas.drawShadow(path, color, 5.0, true);
+    canvas.drawShadow(path, shadowColor, 5.0, true);
     canvas.drawLine(center, position, linePaint);
   }
 

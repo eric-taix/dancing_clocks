@@ -1,6 +1,7 @@
 import 'package:analog_clock/animation/clock_builder.dart';
 import 'package:analog_clock/landscape.dart';
 import 'package:analog_clock/animation/clock_animation_provider.dart';
+import 'package:analog_clock/theming.dart';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
@@ -15,8 +16,9 @@ class DancingClock extends StatefulWidget {
   _DancingClockState createState() => _DancingClockState();
 }
 
-class _DancingClockState extends State<DancingClock> with SingleTickerProviderStateMixin, LandscapeStatefulMixin {
-  static const columns = 14;
+class _DancingClockState extends State<DancingClock>
+    with SingleTickerProviderStateMixin, LandscapeStatefulMixin {
+  static const columns = 15;
   static const rows = columns * 3 ~/ 5;
 
   ClockAnimationProvider _clockAnimationProvider;
@@ -24,7 +26,8 @@ class _DancingClockState extends State<DancingClock> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    _clockAnimationProvider = ClockAnimationProvider(widget.model, columns, rows, this);
+    _clockAnimationProvider =
+        ClockAnimationProvider(widget.model, columns, rows, this);
   }
 
   @override
@@ -36,13 +39,17 @@ class _DancingClockState extends State<DancingClock> with SingleTickerProviderSt
   Widget build(BuildContext context) {
     final time = DateFormat.Hms().format(DateTime.now());
 
-    return Semantics.fromProperties(
-      properties: SemanticsProperties(
-        label: 'Dancing clock with time $time',
-        value: time,
-      ),
-      child: Center(
-        child: ClockBuilder(columns, rows, widget.model, _clockAnimationProvider),
+    return Container(
+      decoration: new BoxDecoration(color: Theming.of(context).backgroundColor),
+      child: Semantics.fromProperties(
+        properties: SemanticsProperties(
+          label: 'Dancing clock with time $time',
+          value: time,
+        ),
+        child: Center(
+          child: ClockBuilder(
+              columns, rows, widget.model, _clockAnimationProvider),
+        ),
       ),
     );
   }

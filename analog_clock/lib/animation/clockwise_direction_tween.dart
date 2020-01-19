@@ -2,11 +2,16 @@ import 'dart:math' as math;
 import 'package:flutter/animation.dart';
 
 class ClockwiseDirectionTween extends Tween<double> {
-
   static final math.Random _random = math.Random(42);
 
-  factory ClockwiseDirectionTween.from(double begin, double end, {ClockWiseDirection direction = ClockWiseDirection.Random}) {
-    
+  factory ClockwiseDirectionTween.from(double begin, double end,
+      {ClockWiseDirection direction = ClockWiseDirection.Random}) {
+    while (begin > 2 * math.pi) {
+      begin -= 2 * math.pi;
+    }
+    while (end > 2 * math.pi) {
+      end -= 2 * math.pi;
+    }
     var computedEnd = end;
     switch (direction) {
       case ClockWiseDirection.ClockWise:
@@ -31,7 +36,8 @@ class ClockwiseDirectionTween extends Tween<double> {
     return ClockwiseDirectionTween._(begin, computedEnd);
   }
 
-  ClockwiseDirectionTween._(double begin, double end) : super(begin: begin, end: end);
+  ClockwiseDirectionTween._(double begin, double end)
+      : super(begin: begin, end: end);
 }
 
 enum ClockWiseDirection {
