@@ -33,9 +33,6 @@ class ClockwiseDirectionTween extends Tween<double> {
           computedEnd = end < begin ? end + math.pi * 2 : end - math.pi * 2;
         }
     }
-    if (begin - computedEnd > math.pi) {
-      print("A big travel");
-    }
     return ClockwiseDirectionTween._(begin, computedEnd);
   }
 

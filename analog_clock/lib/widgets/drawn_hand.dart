@@ -5,6 +5,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 
 import 'hand.dart';
 
@@ -14,6 +15,7 @@ import 'hand.dart';
 /// This hand is used to build the second and minute hands, and demonstrates
 /// building a custom hand.
 class DrawnHand extends Hand {
+
   /// Create a const clock [Hand].
   ///
   /// All of the parameters are required and must not be null.
@@ -35,6 +37,7 @@ class DrawnHand extends Hand {
         size: size,
         angleRadians: angleRadians,
       );
+
 
   /// How thick the hand should be drawn, in logical pixels.
   final double thickness;
@@ -60,6 +63,9 @@ class DrawnHand extends Hand {
 
 /// [CustomPainter] that draws a clock hand.
 class _HandPainter extends CustomPainter {
+
+  static const pi2 = math.pi / 2.0;
+
   _HandPainter({
     @required this.handSize,
     @required this.lineWidth,
@@ -83,23 +89,24 @@ class _HandPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    var width = lineWidth;
     final linePaint = Paint()
       ..color = color
-      ..strokeWidth = lineWidth
+      ..strokeWidth = width
       ..strokeCap = StrokeCap.round;
 
-    final center = (Offset(0.0, -0.2) & size).center;
-    final angle = angleRadians - math.pi / 2.0;
+    final center = (Offset.zero & size).center;
+    final angle = angleRadians - pi2;
     final length = size.shortestSide * 0.5 * handSize;
     final dest = Offset(math.cos(angle), math.sin(angle)) * length;
     final position = center + dest;
 
-    final centerShadow = center + Offset(0.0, 0.0);
+    final centerShadow = center + Offset.zero;
     final positionShadow = centerShadow + dest;
     var path = Path()
       ..moveTo(centerShadow.dx, centerShadow.dy)
-      ..lineTo(positionShadow.dx, positionShadow.dy)..lineTo(positionShadow.dx, positionShadow.dy + lineWidth)..lineTo(
-          centerShadow.dx, centerShadow.dy + lineWidth)
+      ..lineTo(positionShadow.dx, positionShadow.dy)..lineTo(positionShadow.dx, positionShadow.dy + width)..lineTo(
+          centerShadow.dx, centerShadow.dy + width)
       ..close();
     canvas.drawShadow(path, shadowColor, 5.0, true);
     canvas.drawLine(center, position, linePaint);

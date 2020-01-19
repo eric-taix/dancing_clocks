@@ -15,7 +15,7 @@ class AnimatedHand extends StatefulWidget {
   final Coordinates coordinate;
   final ClockAnimationProvider clockAnimationProvider;
 
-  AnimatedHand({@required this.coordinate, @required this.clockAnimationProvider, this.startAngle = 0, this.startOpacity = 1.0,  this.size = 1});
+  AnimatedHand({@required this.coordinate, @required this.clockAnimationProvider, this.startAngle = 0, this.startOpacity = 1.0, this.size = 1});
 
   @override
   _AnimatedHandState createState() => _AnimatedHandState();
@@ -38,10 +38,8 @@ class _AnimatedHandState extends State<AnimatedHand> {
   }
 
   void statusChanged(AnimationStatus status) {
-    print("status changed");
     if (status == AnimationStatus.completed) {
-      print("status completed");
-      _buildTween(animation.angleAnimation.value, animation.thicknessAnimation.value);
+      _buildTween(animation.angleAnimation.value, animation.opacityAnimation.value);
     }
   }
 
@@ -65,15 +63,14 @@ class _AnimatedHandState extends State<AnimatedHand> {
       animation: widget.clockAnimationProvider.animationController,
       builder: (BuildContext context, Widget _widget) {
         return Opacity(
-          opacity: animation.thicknessAnimation.value,
-          child: DrawnHand(
-            color: theming.handColor,
-            shadowColor: theming.handShadowColor,
-            thickness: 7.0, //animation.thicknessAnimation.value,
-            size: widget.size,
-            angleRadians: animation.angleAnimation.value,
-          ),
-        );
+            opacity: animation.opacityAnimation.value,
+            child: DrawnHand(
+              color: theming.handColor,
+              shadowColor: theming.handShadowColor,
+              thickness: 7.0,
+              size: widget.size,
+              angleRadians: animation.angleAnimation.value,
+            ));
       },
     );
   }

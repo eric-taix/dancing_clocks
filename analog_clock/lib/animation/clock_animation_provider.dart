@@ -22,32 +22,29 @@ class ClockAnimationProvider {
   ClockAnimationProvider(this.model, this.width, this.height, SingleTickerProviderStateMixin ticker)
       : animationController = new ClockAnimationController(
           vsync: ticker,
-          duration: new Duration(seconds: 41),
+          duration: new Duration(seconds: 60),
         ) {
     animationController
       ..addStatusListener((state) {
         if (state == AnimationStatus.completed) {
           animationController.duration = _prepareNextCycle();
           animationController.notifyHandStatusListeners(state);
-          print("reset");
           animationController.reset();
-          print("forward");
           animationController.forward();
         }
       });
     animationController.duration = _prepareNextCycle();
-    print("First Forward");
     animationController.forward();
   }
 
   Duration _prepareNextCycle() {
     var dancingDuration = Duration(milliseconds: 4000);
-    var dancingPause = Duration(milliseconds: 600);
+    var dancingPause = Duration(milliseconds: 1000);
     var dancingCount = 2;
     animationList = AnimationList(width, height);
     _buildTimeAnimation(
-      duration: Duration(milliseconds: 3500),
-      blinkDuration: Duration(milliseconds: 1000),
+      duration: Duration(milliseconds: 4000),
+      blinkDuration: Duration(milliseconds: 2000),
       animationCount: 4,
     );
     _buildDancingAnimation(
@@ -56,47 +53,47 @@ class ClockAnimationProvider {
       pause: dancingPause,
     );
     _buildTemperatureAnimation(
-      duration: Duration(milliseconds: 3500),
+      duration: Duration(milliseconds: 4000),
       blinkDuration: Duration(milliseconds: 1000),
-      animationCount: 3,
-    );
-    _buildDancingAnimation(
-      duration: dancingDuration,
-      dancingCount: dancingCount,
-      pause: dancingPause,
+      animationCount: 2,
     );
     _buildWeatherAnimation(
       weatherName: model.weatherString,
-      duration: Duration(milliseconds: 3500),
+      duration: Duration(milliseconds: 4000),
       blinkDuration: Duration(milliseconds: 1000),
-      animationCount: 3,
+      animationCount: 2,
     );
     _buildDancingAnimation(
       duration: dancingDuration,
       dancingCount: dancingCount,
       pause: dancingPause,
     );
+ /*   _buildDancingAnimation(
+      duration: dancingDuration,
+      dancingCount: dancingCount,
+      pause: dancingPause,
+    );*/
     return animationList.totalDuration;
   }
 
   HandAnimation getHandAnimation(Coordinates coord, double fromRadian, double fromOpacity) {
     var angleBuilder = AngleTweenBuilder(fromRadian, animationController);
-    var thicknessBuilder = OpacityTweenBuilder(fromOpacity, animationController);
+    var colorBuilder = OpacityTweenBuilder(fromOpacity, animationController);
 
     animationList.images.forEach((image) {
       var pixel = image.getPixelsAt(coord);
       var angle;
       if (pixel != null) {
         angle = coord.coordType == CoordType.hours ? pixel.hoursAngle : pixel.minutesAngle;
-        thicknessBuilder.addThicknessTween(1.0, image.duration);
+        colorBuilder.addOpacityTween(1.0, image.duration);
       } else {
         angle = 3.926990816987242;
-        thicknessBuilder.addThicknessTween(0.25, image.duration);
+        colorBuilder.addOpacityTween(0.25, image.duration);
       }
       angleBuilder.addAngleTween(angle, image.duration, direction: image.direction, pause: image.pause, curve: image.curve);
     });
 
-    return HandAnimation(angleBuilder.build(), thicknessBuilder.build());
+    return HandAnimation(angleBuilder.build(), colorBuilder.build());
   }
 
   void _buildTimeAnimation({
@@ -105,12 +102,6 @@ class ClockAnimationProvider {
     @required int animationCount,
   }) {
     var time = DateTime.now();
-    List.generate(
-        animationCount + 1,
-        (index) => index % 2 == 0
-            ? animationList.addImage(Drawing.fromTime(time, colon, model.is24HourFormat), index == 0 ? duration : blinkDuration)
-            : animationList.addImage(Drawing.fromTime(time, colonBlink, model.is24HourFormat), blinkDuration));
-    time = time.add(Duration(minutes: 1));
     List.generate(
         animationCount + 1,
         (index) => index % 2 == 0
@@ -160,7 +151,7 @@ class ClockAnimationProvider {
 
 class HandAnimation {
   final Animation<double> angleAnimation;
-  final Animation<double> thicknessAnimation;
+  final Animation<double> opacityAnimation;
 
-  HandAnimation(this.angleAnimation, this.thicknessAnimation);
+  HandAnimation(this.angleAnimation, this.opacityAnimation);
 }

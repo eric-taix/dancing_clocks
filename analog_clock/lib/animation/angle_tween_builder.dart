@@ -32,7 +32,6 @@ class AngleTweenBuilder {
   }
 
   Animation<double> build() {
-    print("Animation duration: ${_animationController.duration.inMilliseconds} / Cumulative duration: ${_cumulatedDuration.inMilliseconds}");
     if (_cumulatedDuration < _animationController.duration) {
       _items.add(TweenSequenceItem(
         tween: ClockwiseDirectionTween.from(_start, _start, direction: ClockWiseDirection.DontChange),
