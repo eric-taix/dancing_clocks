@@ -95,6 +95,16 @@ void registerDrawings() {
         000.250, 750.000, _space_
       ]));
   Drawing.registerDrawing(
+      "-",
+      Drawing(3, [
+        _space_, _space_, _space_, // Avoid formatting to preserve expressivity
+        _space_, _space_, _space_,
+        500.250, 750.250, 750.500,
+        000.250, 750.250, 000.750,
+        _space_, _space_, _space_,
+        _space_, _space_, _space_,
+      ]));
+  Drawing.registerDrawing(
       "0",
       Drawing(3, [
         500.250, 750.250, 750.500, // Avoid formatting to preserve expressivity
@@ -265,22 +275,22 @@ void registerDrawings() {
   Drawing.registerDrawing(
       "snowy",
       Drawing(7, [
-        _space_, _space_, _space_, 875.125, _space_, _space_, _space_,
-        _space_, 750.000, _space_, 000.500, _space_, 000.250, _space_,
-        _space_, _space_, 375.875, 625.375, 125.625, _space_, _space_,
-        875.625, 750.250, 125.375, _space_, 875.625, 750.250, 125.375,
-        _space_, _space_, 625.125, 125.875, 375.875, _space_, _space_,
-        _space_, 500.750, _space_, 000.500, _space_, 250.500, _space_,
-        _space_, _space_, _space_, 375.625, _space_, _space_, _space_,
+        _space_, _space_, _space_, 815.185, _space_, _space_, _space_,
+        _space_, 690.060, _space_, 000.500, _space_, 940.3100, _space_,
+        _space_, _space_, 375.875, 000.500, 125.625, _space_, _space_,
+        935.565, 750.250, 750.250, _space_, 750.250, 750.250, 065.435,
+        _space_, _space_, 625.125, 000.500, 375.875, _space_, _space_,
+        _space_, 440.810, _space_, 000.500, _space_, 190.560, _space_,
+        _space_, _space_, _space_, 315.685, _space_, _space_, _space_,
       ]));
   Drawing.registerDrawing(
       "snowy-blink",
       Drawing(7, [
         _space_, _space_, _space_, 875.125, _space_, _space_, _space_,
         _space_, 750.000, _space_, 000.500, _space_, 000.250, _space_,
-        _space_, _space_, 375.875, 685.315, 125.625, _space_, _space_,
-        875.625, 750.250, 065.435, _space_, 935.565, 750.250, 125.375,
-        _space_, _space_, 625.125, 185.815, 375.875, _space_, _space_,
+        _space_, _space_, 375.875, 000.500, 125.625, _space_, _space_,
+        875.625, 750.250, 750.250, _space_, 750.250, 750.250, 125.375,
+        _space_, _space_, 625.125, 000.500, 375.875, _space_, _space_,
         _space_, 500.750, _space_, 000.500, _space_, 250.500, _space_,
         _space_, _space_, _space_, 375.625, _space_, _space_, _space_,
       ]));
