@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 
 import 'package:analog_clock/theming.dart';
@@ -19,5 +18,4 @@ class ClockAxis extends StatelessWidget {
       ),
     );
   }
-
 }

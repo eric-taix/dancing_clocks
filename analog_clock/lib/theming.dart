@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 enum _Element {
-  handColor, 
+  handColor,
   backgroundColor,
   shadow,
   handShadow,
@@ -22,11 +22,8 @@ final _darkTheme = {
   _Element.handShadow: Color(0xFF29B1F0)
 };
 
-
-
 class Theming {
   Map<_Element, Color> _colors;
-
 
   Color get handColor => _colors[_Element.handColor];
   Color get backgroundColor => _colors[_Element.backgroundColor];
@@ -35,5 +32,8 @@ class Theming {
 
   Theming(this._colors);
 
-  factory Theming.of(BuildContext context) => Theme.of(context).brightness == Brightness.light ? Theming(_lightTheme) : Theming(_darkTheme);
+  factory Theming.of(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.light
+          ? Theming(_lightTheme)
+          : Theming(_darkTheme);
 }

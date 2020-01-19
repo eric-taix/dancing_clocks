@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 mixin LandscapeStatefulMixin<T extends StatefulWidget> on State<T> {
-
   @override
   void initState() {
     super.initState();

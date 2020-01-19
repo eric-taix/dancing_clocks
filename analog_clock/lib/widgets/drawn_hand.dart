@@ -15,7 +15,6 @@ import 'hand.dart';
 /// This hand is used to build the second and minute hands, and demonstrates
 /// building a custom hand.
 class DrawnHand extends Hand {
-
   /// Create a const clock [Hand].
   ///
   /// All of the parameters are required and must not be null.
@@ -25,19 +24,17 @@ class DrawnHand extends Hand {
     @required double size,
     @required double angleRadians,
     @required Color shadowColor,
-  })
-      : assert(color != null),
+  })  : assert(color != null),
         assert(shadowColor != null),
         assert(thickness != null),
         assert(size != null),
         assert(angleRadians != null),
         super(
-        color: color,
-        shadowColor: shadowColor,
-        size: size,
-        angleRadians: angleRadians,
-      );
-
+          color: color,
+          shadowColor: shadowColor,
+          size: size,
+          angleRadians: angleRadians,
+        );
 
   /// How thick the hand should be drawn, in logical pixels.
   final double thickness;
@@ -63,7 +60,6 @@ class DrawnHand extends Hand {
 
 /// [CustomPainter] that draws a clock hand.
 class _HandPainter extends CustomPainter {
-
   static const pi2 = math.pi / 2.0;
 
   _HandPainter({
@@ -72,8 +68,7 @@ class _HandPainter extends CustomPainter {
     @required this.angleRadians,
     @required this.color,
     @required this.shadowColor,
-  })
-      : assert(handSize != null),
+  })  : assert(handSize != null),
         assert(lineWidth != null),
         assert(angleRadians != null),
         assert(color != null),
@@ -105,8 +100,9 @@ class _HandPainter extends CustomPainter {
     final positionShadow = centerShadow + dest;
     var path = Path()
       ..moveTo(centerShadow.dx, centerShadow.dy)
-      ..lineTo(positionShadow.dx, positionShadow.dy)..lineTo(positionShadow.dx, positionShadow.dy + width)..lineTo(
-          centerShadow.dx, centerShadow.dy + width)
+      ..lineTo(positionShadow.dx, positionShadow.dy)
+      ..lineTo(positionShadow.dx, positionShadow.dy + width)
+      ..lineTo(centerShadow.dx, centerShadow.dy + width)
       ..close();
     canvas.drawShadow(path, shadowColor, 5.0, true);
     canvas.drawLine(center, position, linePaint);
@@ -114,8 +110,10 @@ class _HandPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_HandPainter oldDelegate) {
-    var result =
-        oldDelegate.handSize != handSize || oldDelegate.lineWidth != lineWidth || oldDelegate.angleRadians != angleRadians || oldDelegate.color != color;
+    var result = oldDelegate.handSize != handSize ||
+        oldDelegate.lineWidth != lineWidth ||
+        oldDelegate.angleRadians != angleRadians ||
+        oldDelegate.color != color;
     return result;
   }
 }

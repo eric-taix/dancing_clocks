@@ -18,7 +18,8 @@ class DrawingGenerator {
     return Drawing(
         _width,
         List.generate(_width * _height, (index) {
-          return _distributor.getAngle(Point(index % _width, index ~/ _width), _angle);
+          return _distributor.getAngle(
+              Point(index % _width, index ~/ _width), _angle);
         }));
   }
 }

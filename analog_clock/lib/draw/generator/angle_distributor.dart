@@ -8,8 +8,10 @@ class AngleDistributor {
   Distributor _distributor;
 
   AngleDistributor({int width, int height}) {
-    var divergenceFactor = (_random.nextInt(40) + 10) * (_random.nextBool() ? 1 : -1);
-    var divergencePoint = Point(_random.nextDouble() * (width + 1), _random.nextDouble() * (height + 1));
+    var divergenceFactor =
+        (_random.nextInt(40) + 10) * (_random.nextBool() ? 1 : -1);
+    var divergencePoint = Point(_random.nextDouble() * (width + 1),
+        _random.nextDouble() * (height + 1));
     var distributorIndex = _random.nextInt(5);
     switch (distributorIndex) {
       case 0:
@@ -27,10 +29,12 @@ class AngleDistributor {
         );
         break;
       case 2:
-        _distributor = MagneticDistributor(width, height, Magnet(width, height, _random.nextDouble()*2-1), dontChange());
+        _distributor = MagneticDistributor(width, height,
+            Magnet(width, height, _random.nextDouble() * 2 - 1), dontChange());
         break;
       case 3:
-        _distributor = MagneticDistributor(width, height, Magnet(width, height, _random.nextDouble()*2-1), fixAngle(0));
+        _distributor = MagneticDistributor(width, height,
+            Magnet(width, height, _random.nextDouble() * 2 - 1), fixAngle(0));
         break;
       default:
         _distributor = MirrorDistributor(
@@ -42,11 +46,13 @@ class AngleDistributor {
     }
   }
 
-  double getAngle(Point point, double originalAngle) => _distributor.getAngle(point, originalAngle);
+  double getAngle(Point point, double originalAngle) =>
+      _distributor.getAngle(point, originalAngle);
 }
 
 Point _randomPoint(int width, int height) {
-  return Point(_random.nextDouble() * (width + 1), _random.nextDouble() * (height + 1));
+  return Point(
+      _random.nextDouble() * (width + 1), _random.nextDouble() * (height + 1));
 }
 
 /// Utilities functions to compute mirroring
@@ -55,32 +61,45 @@ typedef int Mirror(int value);
 Mirror noMirror = (value) => value;
 Mirror verticalMirror = (value) => 500 - value;
 Mirror horizontalMirror = (value) => 1000 - value;
-Mirror horizontalAndVerticalMirror = (value) => horizontalMirror(verticalMirror(value));
+Mirror horizontalAndVerticalMirror =
+    (value) => horizontalMirror(verticalMirror(value));
 
 /// Utilities functions to evaluate a distance
 typedef double DivergenceEvaluator(Point point);
 
-DivergenceEvaluator fixedDivergenceEvaluator(double divergence) => (Point point) => divergence;
+DivergenceEvaluator fixedDivergenceEvaluator(double divergence) =>
+    (Point point) => divergence;
 
-DivergenceEvaluator horizontalAxisDivergenceEvaluator(Point center) => (Point point) => center.y - (point.y + 1);
+DivergenceEvaluator horizontalAxisDivergenceEvaluator(Point center) =>
+    (Point point) => center.y - (point.y + 1);
 
-DivergenceEvaluator verticalAxisDivergenceEvaluator(Point center) => (Point point) => center.x - (point.x + 1);
+DivergenceEvaluator verticalAxisDivergenceEvaluator(Point center) =>
+    (Point point) => center.x - (point.x + 1);
 
-DivergenceEvaluator centerDivergenceEvaluator(Point center) => (Point point) => sqrt(pow(point.x - (center.x), 2) + pow(point.y - (center.y), 2));
+DivergenceEvaluator centerDivergenceEvaluator(Point center) => (Point point) =>
+    sqrt(pow(point.x - (center.x), 2) + pow(point.y - (center.y), 2));
 
 /// Utilities functions to compute a mirror angle regardless its position
 typedef int ComputeAngleFromMirror(Point point, int value);
 
-ComputeAngleFromMirror sameAngle() => (Point point, int value) => noMirror(value);
+ComputeAngleFromMirror sameAngle() =>
+    (Point point, int value) => noMirror(value);
 
 ComputeAngleFromMirror angleFromHorizontalAxis(Point center) =>
-    (Point point, int value) => horizontalAxisDivergenceEvaluator(center)(point) < 0 ? verticalMirror(value) : value;
+    (Point point, int value) =>
+        horizontalAxisDivergenceEvaluator(center)(point) < 0
+            ? verticalMirror(value)
+            : value;
 
 ComputeAngleFromMirror angleFromVerticalAxis(Point center) =>
-    (Point point, int value) => verticalAxisDivergenceEvaluator(center)(point) < 0 ? horizontalMirror(value) : value;
+    (Point point, int value) =>
+        verticalAxisDivergenceEvaluator(center)(point) < 0
+            ? horizontalMirror(value)
+            : value;
 
 ComputeAngleFromMirror angleFromHorizontalAndVerticalAxis(Point center) =>
-    (Point point, int value) => angleFromVerticalAxis(center)(point, angleFromHorizontalAxis(center)(point, value));
+    (Point point, int value) => angleFromVerticalAxis(center)(
+        point, angleFromHorizontalAxis(center)(point, value));
 
 /// Compute angles
 abstract class Distributor {
@@ -93,7 +112,8 @@ class MirrorDistributor implements Distributor {
   final DivergenceEvaluator divergenceEvaluator;
   final int divergenceFactor;
 
-  MirrorDistributor(this.computeAngleFromMirror, this.divergenceEvaluator, this.divergenceFactor);
+  MirrorDistributor(this.computeAngleFromMirror, this.divergenceEvaluator,
+      this.divergenceFactor);
 
   @override
   double getAngle(Point point, double angle) {
@@ -110,7 +130,6 @@ class MirrorDistributor implements Distributor {
   }
 }
 
-
 /// A magnet which attracts hands
 class Magnet {
   Point _center;
@@ -125,7 +144,8 @@ class Magnet {
 typedef double CalcDelta(double delta);
 
 CalcDelta dontChange() => (delta) => delta;
-CalcDelta minAngle(double angle) => (delta) => (delta < angle) ? delta = angle : delta;
+CalcDelta minAngle(double angle) =>
+    (delta) => (delta < angle) ? delta = angle : delta;
 CalcDelta fixAngle(double angle) => (delta) => angle;
 
 class MagneticDistributor implements Distributor {
@@ -154,11 +174,12 @@ class MagneticDistributor implements Distributor {
     if (dy > 0) {
       angle = 2 * pi - angle + pi;
     }
-    double delta = pi + (_magnet.strength+1) * (pi/2) - ((pi / 2) * radius / _diagonal);
+    double delta = pi +
+        (_magnet.strength + 1) * (pi / 2) -
+        ((pi / 2) * radius / _diagonal);
     delta = _calcDelta(delta);
     angle += (minutes ? -delta : delta);
 
     return (angle * 1000 / (2 * pi)).round();
   }
-
 }

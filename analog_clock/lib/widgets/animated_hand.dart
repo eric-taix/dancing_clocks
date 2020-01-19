@@ -15,7 +15,12 @@ class AnimatedHand extends StatefulWidget {
   final Coordinates coordinate;
   final ClockAnimationProvider clockAnimationProvider;
 
-  AnimatedHand({@required this.coordinate, @required this.clockAnimationProvider, this.startAngle = 0, this.startOpacity = 1.0, this.size = 1});
+  AnimatedHand(
+      {@required this.coordinate,
+      @required this.clockAnimationProvider,
+      this.startAngle = 0,
+      this.startOpacity = 1.0,
+      this.size = 1});
 
   @override
   _AnimatedHandState createState() => _AnimatedHandState();
@@ -28,18 +33,21 @@ class _AnimatedHandState extends State<AnimatedHand> {
   void initState() {
     super.initState();
     _buildTween(widget.startAngle, widget.startOpacity);
-    widget.clockAnimationProvider.animationController.addHandStatusListener(statusChanged);
+    widget.clockAnimationProvider.animationController
+        .addHandStatusListener(statusChanged);
   }
 
   @override
   void dispose() {
-    widget.clockAnimationProvider.animationController.removeHandStatusListener(statusChanged);
+    widget.clockAnimationProvider.animationController
+        .removeHandStatusListener(statusChanged);
     super.dispose();
   }
 
   void statusChanged(AnimationStatus status) {
     if (status == AnimationStatus.completed) {
-      _buildTween(animation.angleAnimation.value, animation.opacityAnimation.value);
+      _buildTween(
+          animation.angleAnimation.value, animation.opacityAnimation.value);
     }
   }
 
@@ -53,7 +61,8 @@ class _AnimatedHandState extends State<AnimatedHand> {
       currentRadian = currentRadian + 2 * math.pi;
     }
 
-    animation = widget.clockAnimationProvider.getHandAnimation(widget.coordinate, currentRadian, currentOpacity);
+    animation = widget.clockAnimationProvider
+        .getHandAnimation(widget.coordinate, currentRadian, currentOpacity);
   }
 
   @override

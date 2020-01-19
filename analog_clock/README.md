@@ -50,7 +50,8 @@ I think that for a real clock used in the bedroom, the animations should be stop
 ## Bugs
 - start of the app hangs sometimes 
 - first animation with no time/temperature/weather for the first minute
-- am/pm format
+x am/pm format
 - size of the hand according to the density
-
-
+- what if the total animation does not fill a minute?
+- test performance in release mode
+- change name in android?

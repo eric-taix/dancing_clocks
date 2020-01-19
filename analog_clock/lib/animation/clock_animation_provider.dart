@@ -19,7 +19,8 @@ class ClockAnimationProvider {
 
   AnimationList animationList;
 
-  ClockAnimationProvider(this.model, this.width, this.height, SingleTickerProviderStateMixin ticker)
+  ClockAnimationProvider(this.model, this.width, this.height,
+      SingleTickerProviderStateMixin ticker)
       : animationController = new ClockAnimationController(
           vsync: ticker,
           duration: new Duration(seconds: 60),
@@ -68,7 +69,7 @@ class ClockAnimationProvider {
       dancingCount: dancingCount,
       pause: dancingPause,
     );
- /*   _buildDancingAnimation(
+    /*   _buildDancingAnimation(
       duration: dancingDuration,
       dancingCount: dancingCount,
       pause: dancingPause,
@@ -76,7 +77,8 @@ class ClockAnimationProvider {
     return animationList.totalDuration;
   }
 
-  HandAnimation getHandAnimation(Coordinates coord, double fromRadian, double fromOpacity) {
+  HandAnimation getHandAnimation(
+      Coordinates coord, double fromRadian, double fromOpacity) {
     var angleBuilder = AngleTweenBuilder(fromRadian, animationController);
     var colorBuilder = OpacityTweenBuilder(fromOpacity, animationController);
 
@@ -84,13 +86,16 @@ class ClockAnimationProvider {
       var pixel = image.getPixelsAt(coord);
       var angle;
       if (pixel != null) {
-        angle = coord.coordType == CoordType.hours ? pixel.hoursAngle : pixel.minutesAngle;
+        angle = coord.coordType == CoordType.hours
+            ? pixel.hoursAngle
+            : pixel.minutesAngle;
         colorBuilder.addOpacityTween(1.0, image.duration);
       } else {
         angle = 3.926990816987242;
         colorBuilder.addOpacityTween(0.25, image.duration);
       }
-      angleBuilder.addAngleTween(angle, image.duration, direction: image.direction, pause: image.pause, curve: image.curve);
+      angleBuilder.addAngleTween(angle, image.duration,
+          direction: image.direction, pause: image.pause, curve: image.curve);
     });
 
     return HandAnimation(angleBuilder.build(), colorBuilder.build());
@@ -105,8 +110,12 @@ class ClockAnimationProvider {
     List.generate(
         animationCount + 1,
         (index) => index % 2 == 0
-            ? animationList.addImage(Drawing.fromTime(time, colon, model.is24HourFormat), index == 0 ? duration : blinkDuration)
-            : animationList.addImage(Drawing.fromTime(time, colonBlink, model.is24HourFormat), blinkDuration));
+            ? animationList.addImage(
+                Drawing.fromTime(time, colon, model.is24HourFormat),
+                index == 0 ? duration : blinkDuration)
+            : animationList.addImage(
+                Drawing.fromTime(time, colonBlink, model.is24HourFormat),
+                blinkDuration));
   }
 
   void _buildWeatherAnimation({
@@ -116,7 +125,8 @@ class ClockAnimationProvider {
     @required int animationCount,
   }) {
     for (int index = 0; index < animationCount; index++) {
-      animationList.addImage([Drawing.fromKey("$weatherName-blink")], index == 0 ? duration : blinkDuration);
+      animationList.addImage([Drawing.fromKey("$weatherName-blink")],
+          index == 0 ? duration : blinkDuration);
       animationList.addImage([Drawing.fromKey(weatherName)], blinkDuration);
     }
   }
@@ -143,8 +153,12 @@ class ClockAnimationProvider {
     @required Duration blinkDuration,
   }) {
     for (int index = 0; index < animationCount; index++) {
-      animationList.addImage(Drawing.fromTemperature(model.temperature, degree, model.unit), index == 0 ? duration : blinkDuration);
-      animationList.addImage(Drawing.fromTemperature(model.temperature, degreeBlink, model.unit), blinkDuration);
+      animationList.addImage(
+          Drawing.fromTemperature(model.temperature, degree, model.unit),
+          index == 0 ? duration : blinkDuration);
+      animationList.addImage(
+          Drawing.fromTemperature(model.temperature, degreeBlink, model.unit),
+          blinkDuration);
     }
   }
 }

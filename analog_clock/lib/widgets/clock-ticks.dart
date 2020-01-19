@@ -22,7 +22,17 @@ class ClockTicks extends StatelessWidget {
 
 class _TicksPainter extends CustomPainter {
   final Color color;
-  final _tickRadians = [0, pi / 4, 2 * pi / 4, 3 * pi / 4, 4 * pi / 4, 5 * pi / 4, 6 * pi / 4, 7 * pi / 4, 2 * pi];
+  final _tickRadians = [
+    0,
+    pi / 4,
+    2 * pi / 4,
+    3 * pi / 4,
+    4 * pi / 4,
+    5 * pi / 4,
+    6 * pi / 4,
+    7 * pi / 4,
+    2 * pi
+  ];
 
   _TicksPainter({@required this.color}) : assert(color != null);
 
@@ -41,7 +51,8 @@ class _TicksPainter extends CustomPainter {
       final radian = _tickRadians[idx];
       final angle = radian - pi / 2.0;
       final origin = Offset(cos(angle), sin(angle)) * length;
-      final dest = Offset(cos(angle), sin(angle)) * (idx % 2 == 0 ? 6 : 7) * length / 8;
+      final dest =
+          Offset(cos(angle), sin(angle)) * (idx % 2 == 0 ? 6 : 7) * length / 8;
       canvas.drawLine(center + origin, center + dest, linePaint);
     }
   }

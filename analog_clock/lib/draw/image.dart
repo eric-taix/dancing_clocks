@@ -14,7 +14,8 @@ class Image {
   final Curve curve;
   List<List<Angle>> _pixels;
 
-  Image(this.width, this.height, this.duration, this.direction, List<Drawing> drawings,
+  Image(this.width, this.height, this.duration, this.direction,
+      List<Drawing> drawings,
       {this.pause, math.Point<int> position, this.curve = Curves.easeInOut}) {
     _clear();
     if (position == null) {
@@ -37,16 +38,15 @@ class Image {
   }
 
   void _clear() {
-    _pixels = new List.generate(height, (_) =>
-        List.generate(width, (_) =>
-        Drawing
-            .fromKey(" ")
-            .pixels[0]));
+    _pixels = new List.generate(height,
+        (_) => List.generate(width, (_) => Drawing.fromKey(" ").pixels[0]));
   }
 
   math.Point<int> _center(List<Drawing> drawings) {
-    var drawingsWidth = drawings.fold(0, (acc, characterAngle) => acc + characterAngle.width);
-    var drawingHeight = drawings.fold(0, (acc, drawing) => drawing.height > acc ? drawing.height : acc);
+    var drawingsWidth =
+        drawings.fold(0, (acc, characterAngle) => acc + characterAngle.width);
+    var drawingHeight = drawings.fold(
+        0, (acc, drawing) => drawing.height > acc ? drawing.height : acc);
     var paddingX = (width - drawingsWidth) ~/ 2;
     var paddingY = (height - drawingHeight) ~/ 2;
     paddingY = paddingY + ((height - drawingHeight) % 2 != 0 ? 1 : 0);

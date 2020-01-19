@@ -12,7 +12,10 @@ class AngleTweenBuilder {
 
   final List<TweenSequenceItem<double>> _items = List();
 
-  void addAngleTween(double end, Duration duration, {ClockWiseDirection direction = ClockWiseDirection.Shortest, Curve curve = Curves.easeInOut, Duration pause}) {
+  void addAngleTween(double end, Duration duration,
+      {ClockWiseDirection direction = ClockWiseDirection.Shortest,
+      Curve curve = Curves.easeInOut,
+      Duration pause}) {
     _cumulatedDuration += duration;
     _items.add(TweenSequenceItem(
         tween: ClockwiseDirectionTween.from(
@@ -26,7 +29,10 @@ class AngleTweenBuilder {
 
     if (pause != null) {
       _cumulatedDuration += pause;
-      _items.add(TweenSequenceItem(tween: ClockwiseDirectionTween.from(end, end, direction: ClockWiseDirection.DontChange), weight: _duration2Weight(pause)));
+      _items.add(TweenSequenceItem(
+          tween: ClockwiseDirectionTween.from(end, end,
+              direction: ClockWiseDirection.DontChange),
+          weight: _duration2Weight(pause)));
     }
     _start = end;
   }
@@ -34,12 +40,16 @@ class AngleTweenBuilder {
   Animation<double> build() {
     if (_cumulatedDuration < _animationController.duration) {
       _items.add(TweenSequenceItem(
-        tween: ClockwiseDirectionTween.from(_start, _start, direction: ClockWiseDirection.DontChange),
-        weight: _duration2Weight(_animationController.duration - _cumulatedDuration),
+        tween: ClockwiseDirectionTween.from(_start, _start,
+            direction: ClockWiseDirection.DontChange),
+        weight: _duration2Weight(
+            _animationController.duration - _cumulatedDuration),
       ));
     }
     return TweenSequence(_items).animate(_animationController);
   }
 
-  double _duration2Weight(Duration duration) => (duration.inMilliseconds * 1000) / _animationController.duration.inMilliseconds;
+  double _duration2Weight(Duration duration) =>
+      (duration.inMilliseconds * 1000) /
+      _animationController.duration.inMilliseconds;
 }

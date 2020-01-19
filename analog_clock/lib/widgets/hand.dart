@@ -24,6 +24,7 @@ abstract class Hand extends StatelessWidget {
 
   /// Hand color.
   final Color color;
+
   /// Hand shadow color.
   final Color shadowColor;
 

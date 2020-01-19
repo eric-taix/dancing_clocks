@@ -4,7 +4,6 @@ import 'package:flutter/animation.dart';
 
 import 'clockwise_direction_tween.dart';
 
-
 class AnimationList {
   final int _width;
   final int _height;
@@ -17,7 +16,9 @@ class AnimationList {
   AnimationList(this._width, this._height);
 
   void addImage(List<Drawing> drawings, Duration duration,
-      {ClockWiseDirection direction = ClockWiseDirection.Shortest, Duration pause, Curve curve = Curves.easeInOut}) {
+      {ClockWiseDirection direction = ClockWiseDirection.Shortest,
+      Duration pause,
+      Curve curve = Curves.easeInOut}) {
     _images.add(Image(
       _width,
       _height,

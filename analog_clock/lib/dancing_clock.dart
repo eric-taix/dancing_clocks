@@ -16,7 +16,8 @@ class DancingClock extends StatefulWidget {
   _DancingClockState createState() => _DancingClockState();
 }
 
-class _DancingClockState extends State<DancingClock> with SingleTickerProviderStateMixin, LandscapeStatefulMixin {
+class _DancingClockState extends State<DancingClock>
+    with SingleTickerProviderStateMixin, LandscapeStatefulMixin {
   static const columns = 15;
   static const rows = columns * 3 ~/ 5;
 
@@ -25,7 +26,8 @@ class _DancingClockState extends State<DancingClock> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    _clockAnimationProvider = ClockAnimationProvider(widget.model, columns, rows, this);
+    _clockAnimationProvider =
+        ClockAnimationProvider(widget.model, columns, rows, this);
   }
 
   @override
@@ -45,7 +47,8 @@ class _DancingClockState extends State<DancingClock> with SingleTickerProviderSt
           value: time,
         ),
         child: Center(
-          child: ClockBuilder(columns, rows, widget.model, _clockAnimationProvider),
+          child: ClockBuilder(
+              columns, rows, widget.model, _clockAnimationProvider),
         ),
       ),
     );
